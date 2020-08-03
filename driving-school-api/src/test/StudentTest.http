@@ -1,7 +1,37 @@
-GET http://localhost:8080/api/student
+GET http://localhost:8282/api/manage/students
 Accept: application/json
 ###
-POST http://localhost:8080/api/student
+POST http://localhost:8282/api/manage/students
+Content-Type: application/json
+
+{
+  "firstName": "xxstName Student",
+  "lastName": "testSurname Student",
+  "address": "testAddress Student",
+  "email": "aaa@aaa",
+  "hours": 0,
+  "phone": "909090",
+  "status": "Active",
+  "categoryList": ["A"],
+  "user":
+  {
+    "username": "qq431",
+    "password": "wserwe123"
+  }
+}
+###
+GET http://localhost:8282/api/manage/students/5
+Accept: application/json
+###
+DELETE http://localhost:8282/api/manage/students/1
+Accept: application/json
+###
+
+
+
+
+###
+POST http://localhost:8282/api/manage/students
 Content-Type: application/json
 
 {
@@ -14,41 +44,12 @@ Content-Type: application/json
   "categoryList": ["A"],
   "user":
   {
-    "loginName": "4531",
+    "username": "453as661",
     "password": "wserwe123"
   }
 }
 ###
-GET http://localhost:8080/api/student/5
-Accept: application/json
-###
-DELETE http://localhost:8080/api/student/1
-Accept: application/json
-###
-
-
-
-
-###
-POST http://localhost:8080/api/student
-Content-Type: application/json
-
-{
-  "firstName": "xxatestName Student",
-  "lastName": "testSurname Student",
-  "address": "testAddress Student",
-  "email": "aaa@aaa",
-  "hours": 0,
-  "status": "Active",
-  "categoryList": ["A"],
-  "user":
-  {
-    "loginName": "453as661",
-    "password": "wserwe123"
-  }
-}
-###
-POST http://localhost:8080/api/student
+POST http://localhost:8282/api/manage/students
 Content-Type: application/json
 
 {
@@ -61,12 +62,12 @@ Content-Type: application/json
 "categoryList": ["B" ],
   "user":
   {
-    "loginName": "3b21",
+    "username": "3b21",
     "password": "wserwe123"
   }
 }
 ###
-POST http://localhost:8080/api/student
+POST http://localhost:8282/api/manage/students
 Content-Type: application/json
 
 {
@@ -79,12 +80,12 @@ Content-Type: application/json
 "categoryList": ["A"],
   "user":
   {
-    "loginName": "34100",
+    "username": "340",
     "password": "wserwe123"
   }
 }
 ###
-POST http://localhost:8080/api/student
+POST http://localhost:8282/api/manage/students
 Content-Type: application/json
 
 {
@@ -97,7 +98,7 @@ Content-Type: application/json
 "categoryList": ["A"],
   "user":
   {
-    "loginName": "3453sb21",
+    "username": "3453sb21",
     "password": "wserwe123"
   }
 }

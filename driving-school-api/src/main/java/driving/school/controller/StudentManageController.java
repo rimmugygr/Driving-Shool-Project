@@ -1,59 +1,56 @@
 package driving.school.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import driving.school.model.Views;
-import driving.school.model.user.Student;
+import driving.school.dto.StudentUserDto;
+import driving.school.mapper.StudentMapper;
 import driving.school.services.StudentService;
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @RestController
-@RequestMapping("api/student")
+@RequestMapping("api/manage/students")
 public class StudentManageController {
     StudentService studentService;
-
-    public StudentManageController(StudentService studentService) {
-        this.studentService = studentService;
-    }
+    StudentMapper studentMapper;
 
     @GetMapping
-    @JsonView(Views.AdminView.class)
-    @ResponseStatus(HttpStatus.OK)
-    public List<Student> getAllStudent() {
-        return studentService.getAllStudent();
+    public ResponseEntity<List<StudentUserDto>> getAllStudent() {
+        List<StudentUserDto> studentUserDto = studentService.getAllStudent().stream()
+                .map(studentMapper::map)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(studentUserDto);
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.AdminView.class)
-    @ResponseStatus(HttpStatus.OK)
-    public Student getStudent(@PathVariable String id) throws NoSuchElementException {
-        return studentService.getStudentById(id);
+    public ResponseEntity<StudentUserDto> getStudent(@PathVariable long id) {
+        return ResponseEntity.ok().body(studentMapper.map(studentService.getStudentById(id)));
     }
 
     @PatchMapping("/{id}")
-    @JsonView(Views.AdminView.class)
-    @ResponseStatus(HttpStatus.OK)
-    public void patchStudent(@PathVariable String id,
-                             @RequestBody Student student) throws NoSuchElementException, SQLIntegrityConstraintViolationException {
-        studentService.editStudentById(id, student);
+    public ResponseEntity<Void> patchStudent(@PathVariable long id,
+                             @RequestBody StudentUserDto studentUserDto) throws NoSuchElementException, SQLIntegrityConstraintViolationException {
+        studentService.editStudentById(id, studentMapper.map(studentUserDto));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping()
-    @JsonView(Views.AdminView.class)
-    @ResponseStatus(HttpStatus.CREATED)
-    public Student postStudent(@RequestBody Student student) throws SQLIntegrityConstraintViolationException {
-        return studentService.addStudent(student);
+    public ResponseEntity<Void> postStudent(@RequestBody StudentUserDto studentUserDto) throws SQLIntegrityConstraintViolationException, URISyntaxException {
+        Long id = studentService.addStudent(studentMapper.map(studentUserDto));
+        return ResponseEntity.created(URI.create("api/manage/students/"+ id)).build();
     }
 
     @DeleteMapping("/{id}")
-    @JsonView(Views.AdminView.class)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteStudent(@PathVariable String id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable long id) {
         studentService.deleteStudentById(id);
+        return ResponseEntity.notFound().build();
     }
 
 

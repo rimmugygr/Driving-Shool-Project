@@ -2,7 +2,6 @@ package driving.school.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import driving.school.model.RideDate;
-import driving.school.model.Views;
 import driving.school.services.RideService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +19,14 @@ public class RideStudentController {
     }
 
     @GetMapping("/student/{studentId}")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.OK)
     public List<RideDate> getAllRideByStudent(@PathVariable String studentId) {
         return rideService.getAllRideByStudentId(studentId);
     }
 
     @PostMapping("/teacher/{teacherId}/student/{studentId}")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.CREATED)
     public void postRideByStudent(@PathVariable(name = "teacherId") String teacherId,
                                   @PathVariable(name = "studentId") String studentId,
@@ -36,7 +35,7 @@ public class RideStudentController {
     }
 
     @DeleteMapping("/teacher/{teacherId}/student/{studentId}")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void deleteRideByStudent(@PathVariable(name = "teacherId") String teacherId,
                                     @PathVariable(name = "studentId") String studentId,

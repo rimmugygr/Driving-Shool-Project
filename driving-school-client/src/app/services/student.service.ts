@@ -7,26 +7,27 @@ import {Student} from '../model/Student';
   providedIn: 'root'
 })
 export class StudentService {
+  link = '/server/api/students';
 
   constructor(private http: HttpClient) { }
 
   getAllStudent(): Observable<any> {
-    return this.http.get('/server/api/student');
+    return this.http.get(this.link);
   }
 
   getStudent(studentId: number): Observable<any> {
-    return this.http.get('/server/api/student/' + studentId);
+    return this.http.get(this.link + studentId);
   }
 
   addStudent(student: Student): Observable<any>  {
     return this.http.post(
-      '/server/api/student',
+      this.link,
       JSON.stringify(student),
       {headers : new HttpHeaders({'Content-Type': 'application/json'})}
     );
   }
 
   deleteStudent(studentId: number): Observable<any>  {
-    return this.http.delete('/server/api/student/' + studentId);
+    return this.http.delete(this.link + studentId);
   }
 }

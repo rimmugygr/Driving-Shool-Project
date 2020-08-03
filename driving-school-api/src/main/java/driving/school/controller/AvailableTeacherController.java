@@ -2,7 +2,6 @@ package driving.school.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import driving.school.model.AvailableDate;
-import driving.school.model.Views;
 import driving.school.services.AvailableService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,21 +19,21 @@ public class AvailableTeacherController {
     }
 
     @GetMapping("/teacher/{teacherId}/available")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.OK)
     public List<AvailableDate> getAvailableRideByTeacher(@PathVariable String teacherId) {
         return availableService.getAllAvailableDateByTeacher(teacherId);
     }
 
     @GetMapping("/teacher/available")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.OK)
     public List<AvailableDate> getAllAvailableRide() {
         return availableService.getAllAvailableDate();
     }
 
     @PostMapping("/teacher/{teacherId}/available")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.CREATED)
     public void postAvailableRideByTeacher(@PathVariable String teacherId,
                                   @RequestBody AvailableDate availableDate) throws SQLIntegrityConstraintViolationException {
@@ -42,7 +41,7 @@ public class AvailableTeacherController {
     }
 
     @PostMapping("/teacher/{teacherId}/available/list")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.CREATED)
     public void postAvailableRideByTeacher(@PathVariable String teacherId,
                                   @RequestBody List<AvailableDate> availableDate) throws SQLIntegrityConstraintViolationException {
@@ -50,7 +49,7 @@ public class AvailableTeacherController {
     }
 
     @DeleteMapping("/teacher/{teacherId}/available/{availableId}")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void deleteAvailableRideByTeacher(@PathVariable String teacherId,
                                              @PathVariable String availableId) {
@@ -58,7 +57,7 @@ public class AvailableTeacherController {
     }
 
     @DeleteMapping("/teacher/{teacherId}/available/list")
-    @JsonView(Views.UserView.class)
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void deleteAvailableRideByTeacher(@PathVariable String teacherId,
                                              @RequestBody List<String> availableIdList) {
