@@ -1,0 +1,105 @@
+GET http://localhost:8080/api/student
+Accept: application/json
+###
+POST http://localhost:8080/api/student
+Content-Type: application/json
+
+{
+  "firstName": "xxatestName Student",
+  "lastName": "testSurname Student",
+  "address": "testAddress Student",
+  "email": "aaa@aaa",
+  "hours": 0,
+  "status": "Active",
+  "categoryList": ["A"],
+  "user":
+  {
+    "loginName": "4531",
+    "password": "wserwe123"
+  }
+}
+###
+GET http://localhost:8080/api/student/5
+Accept: application/json
+###
+DELETE http://localhost:8080/api/student/1
+Accept: application/json
+###
+
+
+
+
+###
+POST http://localhost:8080/api/student
+Content-Type: application/json
+
+{
+  "firstName": "xxatestName Student",
+  "lastName": "testSurname Student",
+  "address": "testAddress Student",
+  "email": "aaa@aaa",
+  "hours": 0,
+  "status": "Active",
+  "categoryList": ["A"],
+  "user":
+  {
+    "loginName": "453as661",
+    "password": "wserwe123"
+  }
+}
+###
+POST http://localhost:8080/api/student
+Content-Type: application/json
+
+{
+"firstName": "xxatestName Student",
+"lastName": "testSurname Student",
+"address": "testAddress Student",
+  "email": "aaa@aaa",
+  "hours": 0,
+  "status": "Active",
+"categoryList": ["B" ],
+  "user":
+  {
+    "loginName": "3b21",
+    "password": "wserwe123"
+  }
+}
+###
+POST http://localhost:8080/api/student
+Content-Type: application/json
+
+{
+"firstName": "xxatestName Student",
+"lastName": "testSurname Student",
+"address": "testAddress Student",
+  "email": "aaa@aaa",
+  "hours": 0,
+  "status": "Active",
+"categoryList": ["A"],
+  "user":
+  {
+    "loginName": "34100",
+    "password": "wserwe123"
+  }
+}
+###
+POST http://localhost:8080/api/student
+Content-Type: application/json
+
+{
+"firstName": "xxatestName Student",
+"lastName": "testSurname Student",
+"address": "testAddress Student",
+  "email": "aaa@aaa",
+  "hours": 0,
+  "status": "Active",
+"categoryList": ["A"],
+  "user":
+  {
+    "loginName": "3453sb21",
+    "password": "wserwe123"
+  }
+}
+
+

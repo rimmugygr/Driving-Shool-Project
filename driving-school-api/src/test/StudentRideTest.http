@@ -1,0 +1,23 @@
+GET http://localhost:8080/api/ride/student/2
+Accept: application/json
+###
+POST http://localhost:8080/api/ride/teacher/1/student/2
+Content-Type: application/json
+
+{
+  "date": "2020-07-28 06:00:00"
+}
+###
+POST http://localhost:8080/api/ride/teacher/1/student/1
+Content-Type: application/json
+
+{
+  "date": "2020-07-28 07:00:00"
+}
+###
+POST http://localhost:8080/api/ride/teacher/2/student/1
+Content-Type: application/json
+
+{
+  "date": "2020-07-28 06:00:00"
+}

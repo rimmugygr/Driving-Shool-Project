@@ -1,0 +1,57 @@
+<mat-drawer-container class="app-container" autosize>
+
+
+  <mat-drawer #drawer class="app-sidenav" mode="side" opened="true">
+    <app-sidebar></app-sidebar>
+  </mat-drawer>
+
+  <div class="app-sidenav-content">
+
+
+
+
+
+      <mat-toolbar >
+
+        <button class="btn-primary mr-2" mat-raised-button (click)="drawer.toggle()">
+          Menu
+        </button>
+        <button mat-raised-button class="btn-primary mr-2">
+          Login
+        </button>
+        <app-navbar></app-navbar>
+
+      </mat-toolbar>
+
+
+        <router-outlet></router-outlet>
+
+
+    <mat-toolbar>
+      <app-footer></app-footer>
+    </mat-toolbar>
+
+
+
+
+
+  </div>
+
+</mat-drawer-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

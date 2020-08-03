@@ -1,0 +1,107 @@
+
+
+
+<form [formGroup]="postForm" (ngSubmit)="submitPost()">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Edit Student {{student.firstName}} {{student.lastName}} On Id {{student.id}} </h4>
+    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+
+
+
+    <mat-form-field appearance="outline">
+      <mat-label>FirstName</mat-label>
+      <input matInput formControlName="firstName" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>LastName</mat-label>
+      <input matInput formControlName="lastName" required>
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput  formControlName="email" required>
+    </mat-form-field>
+
+    <br>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cars</mat-label>
+      <select matNativeControl  formControlName="status" required>
+        <option value="Done">Done</option>
+        <option value="Active">Active</option>
+        <option value="NotActive">NotActive</option>
+      </select>
+    </mat-form-field>
+
+    <br>
+    <mat-form-field appearance="outline">
+      <mat-label>Login</mat-label>
+      <input matInput formControlName="loginName" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-hint >Password</mat-hint>
+    </mat-form-field>
+
+    <br>
+
+
+
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hours</mat-label>
+      <input matInput formControlName="hours" required disabled>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>CreateDate</mat-label>
+      <input matInput formControlName="createDate" required disabled>
+    </mat-form-field>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="modal-footer">
+    <div>{{message}}</div>
+    <br>
+    <button mat-raised-button type="button" class="btn btn-primary m-2"
+            (click)="modal.dismiss('cancel click')"
+            [disabled]="studentEditedSaved">Cancel</button>
+    <button mat-raised-button type="submit" class="btn btn-primary m-2"
+            [disabled]="studentEditedSaved" >Save Edition Student</button>
+  </div>
+
+</form>
+
+
+

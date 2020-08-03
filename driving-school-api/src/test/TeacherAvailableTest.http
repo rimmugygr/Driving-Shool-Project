@@ -1,0 +1,25 @@
+GET http://localhost:8080/api/teacher/available
+Accept: application/json
+###
+GET http://localhost:8080/api/teacher/1/available
+Accept: application/json
+###
+POST http://localhost:8080/api/teacher/1/available
+Content-Type: application/json
+
+{
+  "date": "2020-07-26 06:00:00"
+}
+###
+POST http://localhost:8080/api/teacher/1/available/list
+Content-Type: application/json
+
+[
+  {
+    "date": "2020-07-29 06:00:00"
+  },
+  {
+    "date": "2020-07-29 07:00:00"
+  }
+]
+###

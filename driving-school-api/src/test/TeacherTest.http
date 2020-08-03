@@ -1,0 +1,119 @@
+GET http://localhost:8080/api/teacher
+Accept: application/json
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+  "loginName": "sdfsd",
+  "password": "wsrty123",
+  "firstName": "abab",
+  "lastName": "abab",
+  "address": "testAdrtyrtyher",
+  "categoryList": ["A", "C", "D"]
+}
+###
+GET http://localhost:8080/api/teacher/1
+Accept: application/json
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+  "loginName": "bbb",
+  "password": "wsrty123",
+  "firstName": "abab",
+  "lastName": "abab",
+  "address": "testAdrtyrtyher",
+  "categoryList": ["A", "C", "D"]
+}
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+"loginName": "vvv",
+"password": "wsrty123",
+"firstName": "abab",
+"lastName": "abab",
+"address": "testAdrtyrtyher",
+"categoryList": ["A", "C", "D"]
+}
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+"loginName": "ccc",
+"password": "wsrty123",
+"firstName": "abab",
+"lastName": "abab",
+"address": "testAdrtyrtyher",
+"categoryList": ["A", "C", "D"]
+}
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+"loginName": "xxx",
+"password": "wsrty123",
+"firstName": "abab",
+"lastName": "abab",
+"address": "testAdrtyrtyher",
+"categoryList": ["A", "C", "D"]
+}
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+"loginName": "ddd",
+"password": "wsrty123",
+"firstName": "abab",
+"lastName": "abab",
+"address": "testAdrtyrtyher",
+"categoryList": ["C", "D"]
+}
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+  "loginName": "o",
+  "password": "wsrty123",
+  "firstName": "abab",
+  "lastName": "abab",
+  "address": "testAdrtyrtyher",
+  "categoryList": ["A", "D"]
+}
+###
+POST http://localhost:8080/api/teacher
+Content-Type: application/json
+
+{
+  "loginName": "u",
+  "password": "wsrty123",
+  "firstName": "abab",
+  "lastName": "abab",
+  "address": "testAdrtyrtyher",
+  "categoryList": ["D"]
+}
