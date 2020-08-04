@@ -31,7 +31,7 @@ Accept: application/json
 
 
 ###
-POST http://localhost:8282/api/manage/students
+PATCH http://localhost:8282/api/manage/students/1
 Content-Type: application/json
 
 {
@@ -44,7 +44,8 @@ Content-Type: application/json
   "categoryList": ["A"],
   "user":
   {
-    "username": "453as661",
+    "id": 1,
+    "username": "qq431",
     "password": "wserwe123"
   }
 }

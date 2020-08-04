@@ -13,4 +13,5 @@ public interface AvailableDateRepo extends JpaRepository<AvailableDate,Long> {
     List<AvailableDate> findAllByTeacherIdAndReservedIsFalse(Long id);
     List<AvailableDate> findAllByReservedIsFalse();
     void deleteAllByDateIsBefore(Date date);
+    void deleteAvailableDatesByTeacherId(Long teacherId);
 }

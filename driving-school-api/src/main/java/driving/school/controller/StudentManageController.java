@@ -6,7 +6,6 @@ import driving.school.services.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -36,13 +35,13 @@ public class StudentManageController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchStudent(@PathVariable long id,
-                             @RequestBody StudentUserDto studentUserDto) throws NoSuchElementException, SQLIntegrityConstraintViolationException {
+                             @RequestBody StudentUserDto studentUserDto) {
         studentService.editStudentById(id, studentMapper.map(studentUserDto));
         return ResponseEntity.ok().build();
     }
 
     @PostMapping()
-    public ResponseEntity<Void> postStudent(@RequestBody StudentUserDto studentUserDto) throws SQLIntegrityConstraintViolationException, URISyntaxException {
+    public ResponseEntity<Void> postStudent(@RequestBody StudentUserDto studentUserDto) {
         Long id = studentService.addStudent(studentMapper.map(studentUserDto));
         return ResponseEntity.created(URI.create("api/manage/students/"+ id)).build();
     }
@@ -52,6 +51,4 @@ public class StudentManageController {
         studentService.deleteStudentById(id);
         return ResponseEntity.notFound().build();
     }
-
-
 }

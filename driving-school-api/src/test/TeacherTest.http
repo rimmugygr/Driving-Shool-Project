@@ -1,23 +1,39 @@
-GET http://localhost:8080/api/teacher
+GET http://localhost:8282/api/manage/teachers
 Accept: application/json
 ###
-POST http://localhost:8080/api/teacher
+POST http://localhost:8282/api/manage/teachers
 Content-Type: application/json
 
 {
-  "loginName": "sdfsd",
-  "password": "wsrty123",
   "firstName": "abab",
   "lastName": "abab",
   "address": "testAdrtyrtyher",
-  "categoryList": ["A", "C", "D"]
+  "categoryList": ["A", "C", "D"],
+  "user":
+  {
+    "username": "qq8431",
+    "password": "wserwe123"
+  }
 }
 ###
-GET http://localhost:8080/api/teacher/1
+GET http://localhost:8282/api/manage/teachers/1
 Accept: application/json
 ###
+PATCH http://localhost:8282/api/manage/teachers/1
+Content-Type: application/json
 
-
+{
+  "firstName": "abab",
+  "lastName": "abab",
+  "address": "testAdrtyrtyher",
+  "categoryList": ["A", "C", "D"],
+  "user":
+  {
+    "username": "wserwe123",
+    "password": "wserwe123"
+  }
+}
+###
 
 
 

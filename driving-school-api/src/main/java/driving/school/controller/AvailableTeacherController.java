@@ -1,66 +1,77 @@
 package driving.school.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
+
+import driving.school.dto.AvailableDateDto;
+import driving.school.mapper.AvailableMapper;
 import driving.school.model.AvailableDate;
 import driving.school.services.AvailableService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/teachers")
 public class AvailableTeacherController {
     AvailableService availableService;
+    AvailableMapper availableMapper;
 
-    public AvailableTeacherController(AvailableService availableService) {
-        this.availableService = availableService;
+    @GetMapping("/{teacherId}/available")
+    public ResponseEntity<List<AvailableDateDto>> getAvailableRideByTeacher(@PathVariable long teacherId) {
+        List<AvailableDateDto> availableDateDto = availableService.getAllAvailableDateByTeacher(teacherId).stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(availableDateDto);
     }
 
-    @GetMapping("/teacher/{teacherId}/available")
-
+    @GetMapping("/available")
     @ResponseStatus(HttpStatus.OK)
-    public List<AvailableDate> getAvailableRideByTeacher(@PathVariable String teacherId) {
-        return availableService.getAllAvailableDateByTeacher(teacherId);
+    public ResponseEntity<List<AvailableDateDto>> getAllAvailableRide() {
+        List<AvailableDateDto> availableDateDto = availableService.getAllAvailableDate().stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(availableDateDto);
     }
 
-    @GetMapping("/teacher/available")
-
-    @ResponseStatus(HttpStatus.OK)
-    public List<AvailableDate> getAllAvailableRide() {
-        return availableService.getAllAvailableDate();
+    @PostMapping("/{teacherId}/available")
+    public ResponseEntity<Void> postAvailableRideByTeacher(@PathVariable long teacherId,
+                                  @RequestBody AvailableDateDto availableDateDto) throws SQLIntegrityConstraintViolationException {
+        long id = availableService.addAvailableDateByTeacher(teacherId, availableMapper.map(availableDateDto));
+        return ResponseEntity.created(URI.create("/api/teachers/available")).build();
     }
 
-    @PostMapping("/teacher/{teacherId}/available")
-
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postAvailableRideByTeacher(@PathVariable String teacherId,
-                                  @RequestBody AvailableDate availableDate) throws SQLIntegrityConstraintViolationException {
+    @PostMapping("/{teacherId}/available/list")
+    public ResponseEntity<Void> postAvailableRidesByTeacher(@PathVariable long teacherId,
+                                  @RequestBody List<AvailableDateDto> availableDateDto) throws SQLIntegrityConstraintViolationException {
+        List<AvailableDate> availableDate = availableDateDto.stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
         availableService.addAvailableDateByTeacher(teacherId, availableDate);
+        return ResponseEntity.created(URI.create("")).body(null);
     }
 
-    @PostMapping("/teacher/{teacherId}/available/list")
-
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postAvailableRideByTeacher(@PathVariable String teacherId,
-                                  @RequestBody List<AvailableDate> availableDate) throws SQLIntegrityConstraintViolationException {
-        availableService.addAvailableDateByTeacher(teacherId, availableDate);
-    }
-
-    @DeleteMapping("/teacher/{teacherId}/available/{availableId}")
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void deleteAvailableRideByTeacher(@PathVariable String teacherId,
-                                             @PathVariable String availableId) {
+    @DeleteMapping("/available/{availableId}")
+    public ResponseEntity<Void> deleteAvailableRideByTeacher(@PathVariable long availableId) {
         availableService.deleteAvailableDateByTeacher(availableId);
+        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/teacher/{teacherId}/available/list")
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void deleteAvailableRideByTeacher(@PathVariable String teacherId,
-                                             @RequestBody List<String> availableIdList) {
+    @DeleteMapping("/available/list")
+    public ResponseEntity<Void> deleteAvailableRideByTeacher(@RequestBody List<Long> availableIdList) {
         availableService.deleteAvailableDateByTeacher(availableIdList);
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{teacherId}/available")
+    public ResponseEntity<Void> deleteAllAvailableRideByTeacherId( @PathVariable long teacherId) {
+        availableService.deleteAllAvailableDateByTeacherId(teacherId);
+        return ResponseEntity.notFound().build();
     }
 }
+

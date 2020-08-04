@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import driving.school.model.Category;
 import driving.school.model.RideDate;
 import driving.school.model.StudentStatus;
-import driving.school.model.user.User;
 import lombok.*;
 import java.util.Date;
 import java.util.List;
@@ -28,10 +27,8 @@ public class StudentUserDto {
     private List<RideDate> rideDateList;
     private Set<Category> categoryList;
     private UserDto user;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 }

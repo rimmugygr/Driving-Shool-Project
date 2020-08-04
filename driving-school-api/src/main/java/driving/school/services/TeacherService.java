@@ -1,42 +1,58 @@
 package driving.school.services;
 
 
+import driving.school.exceptions.DuplicateUniqueKey;
+import driving.school.exceptions.ResourcesNotFound;
 import driving.school.model.user.Teacher;
 import driving.school.repository.TeacherRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+@AllArgsConstructor
 @Service
 public class TeacherService {
     TeacherRepo teacherRepo;
-
-    public TeacherService(TeacherRepo teacherRepo) {
-        this.teacherRepo = teacherRepo;
-    }
+    UserService userService;
 
     public List<Teacher> getAllTeacher() {
         return teacherRepo.findAll();
     }
 
-    public Teacher getTeacherById(String id) throws  NoSuchElementException{
-        return teacherRepo.findById(Long.valueOf(id))
-                .orElseThrow(() ->new NoSuchElementException("#Errror# Teacher on Id '"+ id +"' not exist in data base"));
+    public Teacher getTeacherById(Long id) {
+        return teacherRepo.findById(id)
+                .orElseThrow(() ->new ResourcesNotFound("Teacher on Id '"+ id +"' not exist"));
     }
 
-    public Teacher addTeacher(Teacher teacher) throws SQLIntegrityConstraintViolationException {
-        return teacherRepo.save(teacher);
+    public Long addTeacher(Teacher teacher){
+        isUniqueUsername(teacher);
+        teacherRepo.save(teacher);
+        return teacher.getId();
     }
 
-    public void editTeacherById(String id, Teacher teacher) throws NoSuchElementException, SQLIntegrityConstraintViolationException {
-        if (teacherRepo.existsById(Long.valueOf(id))) {
-            teacherRepo.save(teacher);
-        } else throw new NoSuchElementException("#Errror# Teacher on Id '"+ id +"' not exist in data base");
+    public void editTeacherById(Long id, Teacher newTeacher) {
+        Teacher oldTeacher = getTeacherById(id);
+        isValidUsername(newTeacher,oldTeacher);
+        newTeacher.setId(id);
+        teacherRepo.save(newTeacher);
     }
 
-    public void deleteTeacherById(String id) {
-        teacherRepo.deleteById(Long.valueOf(id));
+    public void deleteTeacherById(Long id) {
+        teacherRepo.deleteById(id);
+    }
+
+    private void isValidUsername(Teacher newTeacher, Teacher oldTeacher) {
+        if (newTeacher.getUser() != null){
+            if (!oldTeacher.getUser().getUsername().equals(newTeacher.getUser().getUsername())) {
+                isUniqueUsername(newTeacher);
+            }
+        }
+    }
+
+    private void isUniqueUsername(Teacher teacher) {
+        if (teacher.getUser() != null) {
+            if(!userService.isUniqueUsername(teacher.getUser()))
+                throw new DuplicateUniqueKey("Username '" + teacher.getUser().getUsername() + "' already exist");
+        }
     }
 }

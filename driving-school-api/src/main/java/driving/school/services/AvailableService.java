@@ -4,48 +4,44 @@ package driving.school.services;
 import driving.school.model.AvailableDate;
 import driving.school.model.user.Teacher;
 import driving.school.repository.AvailableDateRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.regex.Pattern;
 
+@AllArgsConstructor
 @Service
 public class AvailableService {
-
     AvailableDateRepo availableDateRepo;
 
-    public AvailableService(AvailableDateRepo availableDateRepo) {
-        this.availableDateRepo = availableDateRepo;
-    }
-
-    public void addAvailableDateByTeacher(String teacherId, AvailableDate availableDate) throws SQLIntegrityConstraintViolationException {
-        availableDate.setTeacher(new Teacher(Long.parseLong(teacherId)));
+    public long addAvailableDateByTeacher(long teacherId, AvailableDate availableDate) throws SQLIntegrityConstraintViolationException {
+        availableDate.setTeacher(new Teacher(teacherId));
         availableDateRepo.save(availableDate);
+        return availableDate.getId();
     }
 
-    public void addAvailableDateByTeacher(String teacherId, List<AvailableDate> availableDate) throws SQLIntegrityConstraintViolationException {
-        availableDate.forEach(x->x.setTeacher(new Teacher(Long.parseLong(teacherId))));
+    public void addAvailableDateByTeacher(long teacherId, List<AvailableDate> availableDate) throws SQLIntegrityConstraintViolationException {
+        availableDate.forEach(x->x.setTeacher(new Teacher(teacherId)));
         availableDateRepo.saveAll(availableDate);
     }
 
-    public void deleteAvailableDateByTeacher(String availableId) {
-        availableDateRepo.deleteById(Long.parseLong(availableId));
+    public void deleteAvailableDateByTeacher(long availableId) {
+        availableDateRepo.deleteById(availableId);
     }
 
-    public void deleteAvailableDateByTeacher(List<String> availableId) {
-        availableId.forEach(
-                x-> availableDateRepo.deleteById(Long.parseLong(x))
-        );
+    public void deleteAvailableDateByTeacher(List<Long> availableId) {
+        availableId.forEach(x-> availableDateRepo.deleteById(x));
     }
 
-    public List<AvailableDate> getAllAvailableDateByTeacher(String teacherId) {
-        return availableDateRepo.findAllByTeacherIdAndReservedIsFalse(Long.parseLong(teacherId));
+    public void deleteAllAvailableDateByTeacherId(long teacherId) {
+        availableDateRepo.deleteAvailableDatesByTeacherId(teacherId);
+    }
+
+    public List<AvailableDate> getAllAvailableDateByTeacher(long teacherId) {
+        return availableDateRepo.findAllByTeacherIdAndReservedIsFalse(teacherId);
     }
 
     public List<AvailableDate> getAllAvailableDate() {
