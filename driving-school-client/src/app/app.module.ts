@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {RouterModule} from '@angular/router';
@@ -27,16 +26,16 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
-import { StudentEditModalComponent } from './components/student-edit-modal/student-edit-modal.component';
-import { StudentDeleteModalComponent } from './components/student-delete-modal/student-delete-modal.component';
-import { StudentAddModalComponent } from './components/student-add-modal/student-add-modal.component';
+import { StudentEditModalComponent } from './pages/student-list/components/student-edit-modal/student-edit-modal.component';
+import { StudentDeleteModalComponent } from './pages/student-list/components/student-delete-modal/student-delete-modal.component';
+import { StudentAddModalComponent } from './pages/student-list/components/student-add-modal/student-add-modal.component';
 import {MatSelectModule} from '@angular/material/select';
 import { TeacherListComponent } from './pages/teacher-list/teacher-list.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { TeacherEditModalComponent } from './components/teacher-edit-modal/teacher-edit-modal.component';
-import { TeacherDeleteModalComponent } from './components/teacher-delete-modal/teacher-delete-modal.component';
-import { TeacherAddModalComponent } from './components/teacher-add-modal/teacher-add-modal.component';
+import { TeacherEditModalComponent } from './pages/teacher-list/components/teacher-edit-modal/teacher-edit-modal.component';
+import { TeacherDeleteModalComponent } from './pages/teacher-list/components/teacher-delete-modal/teacher-delete-modal.component';
+import { TeacherAddModalComponent } from './pages/teacher-list/components/teacher-add-modal/teacher-add-modal.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({

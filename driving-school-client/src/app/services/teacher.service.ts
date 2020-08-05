@@ -7,22 +7,34 @@ import {Teacher} from '../model/Teacher';
   providedIn: 'root'
 })
 export class TeacherService {
+  link = '/server/api/manage/teachers';
 
   constructor(private http: HttpClient) { }
 
   getAllTeacher(): Observable<any> {
-    return this.http.get('/server/api/teacher');
+    return this.http.get(this.link);
+  }
+
+  getTeacher(teacherId: number): Observable<any> {
+    return this.http.get(this.link + '/' + teacherId);
   }
 
   addTeacher(teacher: Teacher): Observable<any>  {
     return this.http.post(
-      '/server/api/teacher',
+      this.link,
       JSON.stringify(teacher),
       {headers : new HttpHeaders({'Content-Type': 'application/json'})}
     );
   }
 
+  patchTeacher(teacher: Teacher, teacherId: number): Observable<any>  {
+    return this.http.patch(
+      this.link + '/' + teacherId,
+      JSON.stringify(teacher),
+      {headers : new HttpHeaders({'Content-Type': 'application/json'})}
+    );
+  }
   deleteTeacher(teacherId: number): Observable<any>  {
-    return this.http.delete('/server/api/teacher/' + teacherId);
+    return this.http.delete(this.link + '/' + teacherId);
   }
 }

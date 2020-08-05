@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Student} from '../../model/Student';
-import {StudentService} from '../../services/student.service';
-import {User} from '../../model/User';
+import {Student} from '../../../../model/Student';
+import {StudentService} from '../../../../services/student.service';
+import {User} from '../../../../model/User';
 
 @Component({
   selector: 'app-student-edit-modal',
@@ -34,14 +34,13 @@ export class StudentEditModalComponent implements OnInit {
     if (this.postForm.valid) {
       this.message = 'send data to server';
       newStudent = this.postForm.value;
+      newStudent.createDate =  this.student.createDate;
+      newStudent.hours = this.student.hours;
       newStudent.id = this.studentId;
-      newStudent.user = new User( this.userId, this.postForm.value.loginName, this.postForm.value.password);
-      this.studentService.addStudent(newStudent).subscribe(
-        data => {
-          this.studentEditedSaved = true;
-          newStudent = data as Student;
-        },
-        error => this.message = 'Error not edited',
+      newStudent.user = new User( this.userId, this.postForm.value.username, this.postForm.value.password);
+      this.studentService.patchStudent(newStudent, this.studentId).subscribe(
+        () => { this.studentEditedSaved = true; },
+          error => { this.message = 'Error ' + JSON.stringify(error.error); },
         () => this.message = 'Edited ' + newStudent.firstName + ' ' + newStudent.lastName + ' on id ' + newStudent.id
       );
     } else {
@@ -67,12 +66,12 @@ export class StudentEditModalComponent implements OnInit {
       firstName: new FormControl(this.student.firstName, Validators.required),
       lastName: new FormControl(this.student.lastName, Validators.required),
       address: new FormControl(this.student.address, Validators.required),
-      loginName: new FormControl(this.student.user.loginName, Validators.required),
+      username: new FormControl(this.student.user.username, Validators.required),
       password: new FormControl(this.student.user.password, Validators.required),
       phone: new FormControl(this.student.phone, Validators.required),
       status: new FormControl(this.student.status, Validators.required),
-      createDate: new FormControl(this.student.createDate, Validators.required),
-      hours: new FormControl(this.student.hours, Validators.required)
+      createDate: new FormControl({value: this.student.createDate, disabled: true}, Validators.required),
+      hours: new FormControl({value: this.student.hours, disabled: true}, Validators.required)
     });
   }
 }

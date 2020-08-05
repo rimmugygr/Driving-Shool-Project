@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {StudentService} from '../../services/student.service';
-import {Student} from '../../model/Student';
+import {StudentService} from '../../../../services/student.service';
+import {Student} from '../../../../model/Student';
 
 @Component({
   selector: 'app-student-delete-modal',
@@ -22,10 +22,9 @@ export class StudentDeleteModalComponent implements OnInit {
   }
 
   deleteStudent(): void {
-    let result = '';
     this.studentService.deleteStudent(this.studentId).subscribe(
-      data => result = data,
-      error => this.message = 'Error not deleted on id ' + this.studentId,
+      () => { } ,
+      error => { this.message = 'Error ' + JSON.stringify(error.error); },
       () => {
         this.message = 'Deleted student on id ' + this.studentId;
         this.deleted = true;

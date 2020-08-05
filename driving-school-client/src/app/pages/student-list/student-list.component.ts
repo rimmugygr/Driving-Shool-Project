@@ -3,11 +3,11 @@ import {StudentService} from '../../services/student.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {StudentEditModalComponent} from '../../components/student-edit-modal/student-edit-modal.component';
+import {StudentEditModalComponent} from './components/student-edit-modal/student-edit-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {StudentAddModalComponent} from '../../components/student-add-modal/student-add-modal.component';
+import {StudentAddModalComponent} from './components/student-add-modal/student-add-modal.component';
 import {Student} from '../../model/Student';
-import {StudentDeleteModalComponent} from '../../components/student-delete-modal/student-delete-modal.component';
+import {StudentDeleteModalComponent} from './components/student-delete-modal/student-delete-modal.component';
 
 @Component({
   selector: 'app-student-list',

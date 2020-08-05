@@ -7,7 +7,7 @@ import {Student} from '../model/Student';
   providedIn: 'root'
 })
 export class StudentService {
-  link = '/server/api/students';
+  link = '/server/api/manage/students';
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class StudentService {
   }
 
   getStudent(studentId: number): Observable<any> {
-    return this.http.get(this.link + studentId);
+    return this.http.get(this.link + '/' + studentId);
   }
 
   addStudent(student: Student): Observable<any>  {
@@ -27,7 +27,14 @@ export class StudentService {
     );
   }
 
+  patchStudent(student: Student, studentId: number): Observable<any>  {
+    return this.http.patch(
+      this.link + '/' + studentId,
+      JSON.stringify(student),
+      {headers : new HttpHeaders({'Content-Type': 'application/json'})}
+    );
+  }
   deleteStudent(studentId: number): Observable<any>  {
-    return this.http.delete(this.link + studentId);
+    return this.http.delete(this.link + '/' + studentId);
   }
 }

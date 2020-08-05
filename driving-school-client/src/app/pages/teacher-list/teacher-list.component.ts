@@ -4,9 +4,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {TeacherService} from '../../services/teacher.service';
-import {TeacherEditModalComponent} from '../../components/teacher-edit-modal/teacher-edit-modal.component';
-import {TeacherAddModalComponent} from '../../components/teacher-add-modal/teacher-add-modal.component';
-import {TeacherDeleteModalComponent} from '../../components/teacher-delete-modal/teacher-delete-modal.component';
+import {TeacherEditModalComponent} from './components/teacher-edit-modal/teacher-edit-modal.component';
+import {TeacherAddModalComponent} from './components/teacher-add-modal/teacher-add-modal.component';
+import {TeacherDeleteModalComponent} from './components/teacher-delete-modal/teacher-delete-modal.component';
 
 @Component({
   selector: 'app-teacher-list',
