@@ -30,10 +30,10 @@ public class StudentManageController {
         return ResponseEntity.ok().body(studentMapper.map(studentService.getStudentById(id)));
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> patchStudent(@PathVariable long id,
                              @RequestBody StudentUserDto studentUserDto) {
-        studentService.editStudentById(id, studentMapper.map(studentUserDto));
+        studentService.putStudentById(id, studentMapper.map(studentUserDto));
         return ResponseEntity.ok().build();
     }
 

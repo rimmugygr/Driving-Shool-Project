@@ -31,22 +31,16 @@ Accept: application/json
 
 
 ###
-PATCH http://localhost:8282/api/manage/students/2
+PUT http://localhost:8282/api/manage/students/1
 Content-Type: application/json
 
 {
-  "firstName": "xxatestName Student",
-  "lastName": "testSurname Student",
-  "address": "testAddress Student",
-  "email": "aaa@aaa",
-  "hours": 0,
-  "status": "Active",
-  "categoryList": ["A"],
+
   "user":
   {
-    "id": 1,
-    "username": "qq431",
-    "password": "wserwe123"
+
+    "username": "qq431"
+
   }
 }
 ###

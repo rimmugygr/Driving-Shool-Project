@@ -25,11 +25,10 @@ public class StudentService {
 
     public Long addStudent(Student student)  {
         isUniqueUsername(student);
-        studentRepo.save(student);
-        return student.getId();
+        return  studentRepo.save(student).getId();
     }
 
-    public void editStudentById(long id, Student newStudent) {
+    public void putStudentById(long id, Student newStudent) {
         Student oldStudent = getStudentById(id);
         isValidUsername(newStudent, oldStudent);
         newStudent.setId(id);
@@ -41,11 +40,21 @@ public class StudentService {
     }
 
     private void isValidUsername(Student newStudent, Student oldStudent) {
-        if (newStudent.getUser() != null){
-            if (!oldStudent.getUser().getUsername().equals(newStudent.getUser().getUsername())) {
+        if (isHaveUsername(oldStudent)){
+            isUniqueUsername(newStudent);
+        } else if (newStudent.getUser() != null){
+            if (isDifferentUsername(newStudent, oldStudent)) {
                 isUniqueUsername(newStudent);
             }
         }
+    }
+
+    private boolean isDifferentUsername(Student newStudent, Student oldStudent) {
+        return !oldStudent.getUser().getUsername().equals(newStudent.getUser().getUsername());
+    }
+
+    private boolean isHaveUsername(Student oldStudent) {
+        return oldStudent.getUser() == null || oldStudent.getUser().getUsername() == null;
     }
 
     private void isUniqueUsername(Student student) {

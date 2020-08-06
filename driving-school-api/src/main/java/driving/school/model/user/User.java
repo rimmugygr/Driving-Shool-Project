@@ -1,9 +1,7 @@
 package driving.school.model.user;
 
-import driving.school.model.BaseEntity;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
 
+import lombok.*;
 import javax.persistence.*;
 
 

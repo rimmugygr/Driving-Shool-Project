@@ -30,7 +30,7 @@ public class TeacherService {
         return teacher.getId();
     }
 
-    public void editTeacherById(Long id, Teacher newTeacher) {
+    public void putTeacherById(Long id, Teacher newTeacher) {
         Teacher oldTeacher = getTeacherById(id);
         isValidUsername(newTeacher,oldTeacher);
         newTeacher.setId(id);
@@ -41,6 +41,7 @@ public class TeacherService {
         teacherRepo.deleteById(id);
     }
 
+    //TODO case when newTeacher username == null
     private void isValidUsername(Teacher newTeacher, Teacher oldTeacher) {
         if (newTeacher.getUser() != null){
             if (!oldTeacher.getUser().getUsername().equals(newTeacher.getUser().getUsername())) {
