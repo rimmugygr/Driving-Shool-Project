@@ -28,7 +28,7 @@ export class TeacherService {
   }
 
   patchTeacher(teacher: Teacher, teacherId: number): Observable<any>  {
-    return this.http.patch(
+    return this.http.put(
       this.link + '/' + teacherId,
       JSON.stringify(teacher),
       {headers : new HttpHeaders({'Content-Type': 'application/json'})}

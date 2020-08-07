@@ -41,7 +41,7 @@ public class TeacherService {
         teacherRepo.deleteById(id);
     }
 
-    //TODO case when newTeacher username == null
+    //TODO case when oldTeacher username == null
     private void isValidUsername(Teacher newTeacher, Teacher oldTeacher) {
         if (newTeacher.getUser() != null){
             if (!oldTeacher.getUser().getUsername().equals(newTeacher.getUser().getUsername())) {
