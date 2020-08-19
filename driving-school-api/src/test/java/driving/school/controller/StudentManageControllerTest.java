@@ -8,10 +8,7 @@ import driving.school.model.StudentStatus;
 import driving.school.model.user.Student;
 import driving.school.model.user.User;
 import driving.school.services.StudentService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,7 +40,7 @@ class StudentManageControllerTest {
     String requestStudentJson;
     ResultActions result;
 
-    @DisplayName("when POST /post/runner/{id}")
+    @DisplayName("when data POST /post/runner/{id}")
     @Nested
     class  PostStudent{
         @BeforeEach
@@ -88,23 +85,83 @@ class StudentManageControllerTest {
 
         }
         @Test
-        void shouldAddStudentMenageWhenDataPost() throws Exception {
+        void shouldAddStudent() throws Exception {
             //then
             Mockito.verify(studentServiceMock).addStudent(anyStudent);
         }
         @Test
-        void shouldReturnIsCreatedWhenDataPost() throws Exception {
-            //then
-            result.andExpect(MockMvcResultMatchers.status().isCreated());
-        }
-        @Test
-        void shouldReturnInHeaderLocationResourcesWhenDataPost() throws Exception {
+        void shouldReturnInHeaderLocationResources() throws Exception {
             //then
             result.andExpect(MockMvcResultMatchers.header().string("Location","api/manage/students/" + studentId));
         }
+        @Test
+        void shouldReturnIsCreated() throws Exception {
+            //then
+            result.andExpect(MockMvcResultMatchers.status().isCreated());
+        }
+        @AfterEach
+        void reset() {
+            Mockito.reset(studentServiceMock,studentMapperMock);
+        }
     }
 
+    @DisplayName("when data PUT /post/runner/{id}")
+    @Nested
+    class  PutStudent{
+        @BeforeEach
+        void initEach() throws Exception {
+            //given
+            studentId = 1L;
 
+            anyStudent = Student.builder()
+                    .address("home")
+                    .firstName("first")
+                    .lastName("last")
+                    .email("a@a.pl")
+                    .hours(0)
+                    .phone("12345")
+                    .status(StudentStatus.Active)
+                    .user(User.builder().username("00000").password("000000").build())
+                    .build();
+
+            anyStudentDto = StudentUserDto.builder()
+                    .address("home")
+                    .firstName("first")
+                    .lastName("last")
+                    .email("a@a.pl")
+                    .hours(0)
+                    .phone("12345")
+                    .status(StudentStatus.Active)
+                    .user(UserDto.builder().username("00000").password("000000").build())
+                    .build();
+
+            requestStudentJson = mapper.writeValueAsString(anyStudent);
+
+            Mockito.when(studentMapperMock.map(anyStudentDto))
+                    .thenReturn(anyStudent);
+
+            //when
+            result = mvc.perform(
+                    MockMvcRequestBuilders.put("/api/manage/students/" + studentId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestStudentJson));
+
+        }
+        @Test
+        void shouldPutStudentById() throws Exception {
+            //then
+            Mockito.verify(studentServiceMock).putStudentById(studentId, anyStudent);
+        }
+        @Test
+        void shouldReturnIsOk() throws Exception {
+            //then
+            result.andExpect(MockMvcResultMatchers.status().isOk());
+        }
+        @AfterEach
+        void reset() {
+            Mockito.reset(studentServiceMock,studentMapperMock);
+        }
+    }
     @Test
     void shouldPatchStudentMenageWhenDataPatch() throws Exception {
         //given

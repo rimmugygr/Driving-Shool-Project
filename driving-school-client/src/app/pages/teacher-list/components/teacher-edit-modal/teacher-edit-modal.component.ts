@@ -52,7 +52,7 @@ export class TeacherEditModalComponent implements OnInit {
 
   private getTeacherThenInitForm(): void {
     this.teacherService.getTeacher(this.teacherId).subscribe(
-      () => { this.teacherEditedSaved = true; },
+      data => { this.teacher = data as Teacher; },
       error => { this.message = 'Error ' + JSON.stringify(error.error); },
       () => {
         console.log('success load teacher');
@@ -66,7 +66,8 @@ export class TeacherEditModalComponent implements OnInit {
       firstName: new FormControl(this.teacher.firstName, Validators.required),
       lastName: new FormControl(this.teacher.lastName, Validators.required),
       username: new FormControl(this.teacher.user.username, Validators.required),
-      password: new FormControl(this.teacher.user.password, Validators.required)
+      password: new FormControl(this.teacher.user.password, Validators.required),
+      createDate: new FormControl({value: this.teacher.createDate, disabled: true}, Validators.required)
     });
   }
 }

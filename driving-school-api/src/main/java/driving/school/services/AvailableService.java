@@ -17,14 +17,12 @@ import java.util.List;
 public class AvailableService {
     AvailableDateRepo availableDateRepo;
 
-    public long addAvailableDateByTeacher(long teacherId, AvailableDate availableDate) throws SQLIntegrityConstraintViolationException {
-        availableDate.setTeacher(new Teacher(teacherId));
+    public long addAvailableDate(AvailableDate availableDate) {
         availableDateRepo.save(availableDate);
         return availableDate.getId();
     }
 
-    public void addAvailableDateByTeacher(long teacherId, List<AvailableDate> availableDate) throws SQLIntegrityConstraintViolationException {
-        availableDate.forEach(x->x.setTeacher(new Teacher(teacherId)));
+    public void addAvailableDate(List<AvailableDate> availableDate) {
         availableDateRepo.saveAll(availableDate);
     }
 

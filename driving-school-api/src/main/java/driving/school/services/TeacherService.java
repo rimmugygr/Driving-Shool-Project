@@ -38,7 +38,14 @@ public class TeacherService {
     }
 
     public void deleteTeacherById(Long id) {
+        deleteUserByStudentId(id);
         teacherRepo.deleteById(id);
+    }
+
+    private void deleteUserByStudentId(Long id) {
+        Teacher teacher = teacherRepo.findById(id)
+                .orElseThrow(() -> new ResourcesNotFound("Teacher on Id '" + id + "' not exist"));
+        userService.deleteUser(teacher.getUser());
     }
 
     //TODO case when oldTeacher username == null

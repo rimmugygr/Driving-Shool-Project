@@ -10,15 +10,15 @@ export class MenuService {
     this.targets = new Map<string, ViewContainerRef>();
   }
 
-  addTarget(target: string, viewContainer: ViewContainerRef) {
+  addTarget(target: string, viewContainer: ViewContainerRef): void  {
     this.targets.set(target, viewContainer);
   }
 
-  clearTarget(target: string) {
+  clearTarget(target: string): void {
     this.getTarget(target)?.clear();
   }
 
-  attach(target: string, template: TemplateRef<any>) {
+  attach(target: string, template: TemplateRef<any>): void {
     // const view = template.createEmbeddedView(null);
     // this.getTarget(target)?.insert(view);
     // view.detectChanges();

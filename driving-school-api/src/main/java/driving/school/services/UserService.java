@@ -14,4 +14,8 @@ public class UserService {
         User userResult = userRepo.findUserByUsername(user.getUsername());
         return userResult == null;
     }
+
+    public void deleteUser(User user) {
+        userRepo.delete(user);
+    }
 }

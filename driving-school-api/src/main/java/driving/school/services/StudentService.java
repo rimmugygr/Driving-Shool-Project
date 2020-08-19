@@ -36,7 +36,14 @@ public class StudentService {
     }
 
     public void deleteStudentById(long id) {
+        deleteUserByStudentId(id);
         studentRepo.deleteById(id);
+    }
+
+    private void deleteUserByStudentId(long id) {
+        Student student = studentRepo.findById(id)
+                .orElseThrow(() -> new ResourcesNotFound("Student on Id '" + id + "' not exist"));
+        userService.deleteUser(student.getUser());
     }
 
     private void isValidUsername(Student newStudent, Student oldStudent) {

@@ -18,9 +18,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AvailableDateDto {
+    private long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
-    private Teacher teacher;
+    private long teacherId;
     private boolean reserved;
 //    @Enumerated(EnumType.STRING)
 //    private Category category;

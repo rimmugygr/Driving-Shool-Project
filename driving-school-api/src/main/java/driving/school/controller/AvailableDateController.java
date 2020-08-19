@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/teachers")
-public class AvailableTeacherController {
+public class AvailableDateController {
     AvailableService availableService;
     AvailableMapper availableMapper;
 
@@ -39,20 +39,19 @@ public class AvailableTeacherController {
         return ResponseEntity.ok().body(availableDateDto);
     }
 
-    @PostMapping("/{teacherId}/available")
-    public ResponseEntity<Void> postAvailableRideByTeacher(@PathVariable long teacherId,
-                                  @RequestBody AvailableDateDto availableDateDto) throws SQLIntegrityConstraintViolationException {
-        long id = availableService.addAvailableDateByTeacher(teacherId, availableMapper.map(availableDateDto));
+    @PostMapping("/available")
+    public ResponseEntity<Void> postAvailableRideByTeacher(@RequestBody AvailableDateDto availableDateDto) {
+        long id = availableService.addAvailableDate(availableMapper.map(availableDateDto));
         return ResponseEntity.created(URI.create("/api/teachers/available")).build();
     }
 
-    @PostMapping("/{teacherId}/available/list")
-    public ResponseEntity<Void> postAvailableRidesByTeacher(@PathVariable long teacherId,
+    @PostMapping("/available/list")
+    public ResponseEntity<Void> postAvailableRidesByTeacher(
                                   @RequestBody List<AvailableDateDto> availableDateDto) throws SQLIntegrityConstraintViolationException {
         List<AvailableDate> availableDate = availableDateDto.stream()
                 .map(availableMapper::map)
                 .collect(Collectors.toList());
-        availableService.addAvailableDateByTeacher(teacherId, availableDate);
+        availableService.addAvailableDate(availableDate);
         return ResponseEntity.created(URI.create("")).body(null);
     }
 
