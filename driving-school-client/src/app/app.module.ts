@@ -37,6 +37,7 @@ import { TeacherEditModalComponent } from './pages/teacher-list/components/teach
 import { TeacherDeleteModalComponent } from './pages/teacher-list/components/teacher-delete-modal/teacher-delete-modal.component';
 import { TeacherAddModalComponent } from './pages/teacher-list/components/teacher-add-modal/teacher-add-modal.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { AvailableDateComponent } from './pages/available-date/available-date.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     TeacherListComponent,
     TeacherEditModalComponent,
     TeacherDeleteModalComponent,
-    TeacherAddModalComponent
+    TeacherAddModalComponent,
+    AvailableDateComponent
   ],
     imports: [
         BrowserModule,

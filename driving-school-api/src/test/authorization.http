@@ -1,0 +1,19 @@
+POST http://localhost:8282/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "aaaa",
+  "password": "aaaa",
+  "role": ["ROLE_ADMIN"]
+}
+
+###
+POST http://localhost:8282/api/auth/signin
+Content-Type: application/json
+
+{
+  "username": "aaaa",
+  "password": "aaaa"
+}
+
+###

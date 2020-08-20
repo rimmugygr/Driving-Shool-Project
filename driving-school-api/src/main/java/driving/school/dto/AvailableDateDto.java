@@ -22,6 +22,8 @@ public class AvailableDateDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
     private long teacherId;
+    private String teacherFirstName;
+    private String teacherLastName;
     private boolean reserved;
 //    @Enumerated(EnumType.STRING)
 //    private Category category;

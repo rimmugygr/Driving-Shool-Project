@@ -3,6 +3,8 @@ package driving.school.model.user;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -17,4 +19,20 @@ public class User {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
     private String password;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(	name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_name"))
+    private Set<Authority> roles = new HashSet<>();
+
+    public User(User user) {
+        this.id = user.id;
+        this.username = user.username;
+        this.password = user.password;
+        this.roles = user.roles;
+    }
+
+
+
+
 }

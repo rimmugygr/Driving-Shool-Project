@@ -1,21 +1,21 @@
 package driving.school.services;
 
 import driving.school.model.user.User;
-import driving.school.repository.UserRepo;
+import driving.school.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
 public class UserService {
-    UserRepo userRepo;
+    UserRepository userRepository;
 
     public boolean isUniqueUsername(User user) {
-        User userResult = userRepo.findUserByUsername(user.getUsername());
+        User userResult = userRepository.findUserByUsername(user.getUsername());
         return userResult == null;
     }
 
     public void deleteUser(User user) {
-        userRepo.delete(user);
+        userRepository.delete(user);
     }
 }
