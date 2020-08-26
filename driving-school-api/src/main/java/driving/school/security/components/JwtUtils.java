@@ -1,4 +1,4 @@
-package driving.school.configuration;
+package driving.school.security.components;
 
 
 import io.jsonwebtoken.*;
@@ -13,15 +13,13 @@ import java.util.Date;
 @Slf4j
 @Component
 public class JwtUtils {
-    @Value("${bezkoder.app.jwtSecret}")
+    @Value("${application.jwt.jwtSecret}")
     private String jwtSecret;
-    @Value("${bezkoder.app.jwtExpirationMs}")
+    @Value("${application.jwt.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
-
-
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
@@ -50,7 +48,6 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
     }
 }

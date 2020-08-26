@@ -1,5 +1,6 @@
-GET http://localhost:8080/api/ride/
+GET http://localhost:8282/api/ride/
 Accept: application/json
+
 ###
 GET http://localhost:8080/api/ride/1
 Accept: application/json

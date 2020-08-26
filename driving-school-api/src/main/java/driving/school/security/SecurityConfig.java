@@ -1,9 +1,13 @@
-package driving.school.configuration;
+package driving.school.security;
 
-import driving.school.services.UserDetailsServiceImplementation;
+import driving.school.model.user.Role;
+import driving.school.security.components.AuthEntryPointJwt;
+import driving.school.security.components.AuthTokenFilter;
+import driving.school.security.services.UserDetailsServiceImple;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,38 +24,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Profile("!dev-no-security")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsServiceImplementation userDetailsService;
+    private final UserDetailsServiceImple userDetailsService;
+    private final AuthTokenFilter authTokenFilter;
     private final AuthEntryPointJwt unauthorizedHandler;
-
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.
                 authorizeRequests()
-                .antMatchers("/api/manage/**", "/api/teachers/**", "/api/auth/**").permitAll()
-//                .antMatchers().hasAuthority("ADMIN")
-//                .anyRequest().permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/manage/**").hasAuthority(Role.ROLE_ADMIN.name())
+                .antMatchers("/api/teachers/**").hasAuthority(Role.ROLE_TEACHER.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .httpBasic()
-
-//                .authenticationEntryPoint((request, response, authException) ->
-//                        response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()))
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-//                .and()
-//                .headers().frameOptions().disable()
+                .and()
+                .headers().frameOptions().disable()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

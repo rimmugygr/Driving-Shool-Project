@@ -1,5 +1,6 @@
 GET http://localhost:8282/api/manage/teachers
 Accept: application/json
+
 ###
 POST http://localhost:8282/api/manage/teachers
 Content-Type: application/json

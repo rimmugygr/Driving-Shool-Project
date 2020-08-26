@@ -1,6 +1,6 @@
 package driving.school.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
+
 import driving.school.model.RideDate;
 import driving.school.services.RideService;
 import org.springframework.http.HttpStatus;

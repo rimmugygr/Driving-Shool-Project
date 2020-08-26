@@ -1,7 +1,7 @@
-package driving.school.services;
+package driving.school.security.services;
 
 import driving.school.model.user.User;
-import driving.school.repository.UserRepository;
+import driving.school.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class UserDetailsServiceImplementation implements UserDetailsService {
-    private final UserRepository userRep;
+public class UserDetailsServiceImple implements UserDetailsService {
+    private final UserRepo userRep;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {

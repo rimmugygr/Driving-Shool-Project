@@ -1,5 +1,6 @@
-GET http://localhost:8080/api/teacher/available
+GET http://localhost:8282/api/teachers/available
 Accept: application/json
+
 ###
 GET http://localhost:8080/api/teacher/1/available
 Accept: application/json
