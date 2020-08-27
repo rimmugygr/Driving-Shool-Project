@@ -17,6 +17,7 @@ export class AvailableDateComponent implements OnInit {
   isLoading = true;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  placeName = `Available Date List`;
 
   constructor( private modalService: NgbModal,
                private availableService: AvailableService) { }

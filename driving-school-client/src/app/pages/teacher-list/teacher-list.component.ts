@@ -16,14 +16,15 @@ import {TeacherDeleteModalComponent} from './components/teacher-delete-modal/tea
 export class TeacherListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'firstName', 'lastName', 'createDate', 'updateDate', 'action'];
   public teachers;
+  isLoading = true;
+  placeName = `Teacher List`;
+  @ViewChild(MatPaginator, {static: true})
+  paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true})
+  sort: MatSort;
 
   constructor(private teacherService: TeacherService,
               private modalService: NgbModal) { }
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  isLoading = true;
-
 
   ngOnInit(): void {
     this.getAllTeacher();

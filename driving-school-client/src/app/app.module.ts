@@ -38,6 +38,9 @@ import { TeacherDeleteModalComponent } from './pages/teacher-list/components/tea
 import { TeacherAddModalComponent } from './pages/teacher-list/components/teacher-add-modal/teacher-add-modal.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AvailableDateComponent } from './pages/available-date/available-date.component';
+import {authInterceptorProviders} from './services/auth/auth.interceptor';
+import { LoginModalComponent } from './pages/commons/login-modal/login-modal.component';
+import { TopProfileComponent } from './pages/commons/top-profile/top-profile.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,9 @@ import { AvailableDateComponent } from './pages/available-date/available-date.co
     TeacherEditModalComponent,
     TeacherDeleteModalComponent,
     TeacherAddModalComponent,
-    AvailableDateComponent
+    AvailableDateComponent,
+    LoginModalComponent,
+    TopProfileComponent
   ],
     imports: [
         BrowserModule,
@@ -84,7 +89,7 @@ import { AvailableDateComponent } from './pages/available-date/available-date.co
         ReactiveFormsModule,
         MatProgressSpinnerModule
     ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

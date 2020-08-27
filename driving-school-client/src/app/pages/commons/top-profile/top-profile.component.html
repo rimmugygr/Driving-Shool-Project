@@ -1,0 +1,17 @@
+<div class="content">
+  <div>
+
+    <button class="btn-primary mr-2" mat-raised-button (click)="openLoginModal()" *ngIf="!isLoggedIn">
+      Login
+    </button>
+    <button class="btn-primary mr-2" mat-raised-button (click)="logout()"  *ngIf="isLoggedIn">
+      Logout
+    </button>
+    <strong>{{placeName}} </strong>
+    <div *ngIf="isLoggedIn">
+       | Logged as {{ username }} with {{ roles }}.
+    </div>
+  </div>
+
+</div>
+

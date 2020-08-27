@@ -6,9 +6,20 @@
 }
 
 .app-sidenav-content {
-flex-direction: column;
 }
 
 .app-sidenav {
   width: 240px;
 }
+
+.content div {
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.content {
+  height: 64px;
+}
+
+

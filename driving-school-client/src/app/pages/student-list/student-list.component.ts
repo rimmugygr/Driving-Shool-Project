@@ -20,13 +20,15 @@ import {StudentDeleteModalComponent} from './components/student-delete-modal/stu
 export class StudentListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'firstName', 'lastName', 'address', 'hours', 'status', 'category', 'createDate', 'action'];
   public students;
+  @ViewChild(MatPaginator, {static: true})
+  paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true})
+  sort: MatSort;
+  isLoading = true;
+  placeName = `Student List`;
 
   constructor(private studentService: StudentService,
               private modalService: NgbModal) { }
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  isLoading = true;
 
 
   ngOnInit(): void {

@@ -25,7 +25,8 @@ export class MenuService {
 
     // in one line above
    const view: EmbeddedViewRef<any> = this.getTarget(target)?.createEmbeddedView(template);
-   view.checkNoChanges();
+   // view.checkNoChanges();
+   view.detectChanges();
   }
 
   private getTarget(target: string): ViewContainerRef {
