@@ -1,4 +1,4 @@
-package driving.school.dto;
+package driving.school.dto.request;
 
 
 import lombok.*;
@@ -10,9 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ProfileDto {
+public class ProfileRequest {
     private Long id;
-    private String password;
     private String username;
-    private String type;
+    private String password;
 }

@@ -37,8 +37,16 @@ public class StudentService {
         Student oldStudent = getStudentById(id);
         isValidUsername(newStudent, oldStudent);
         newStudent.setId(id);
-        setAuthority(newStudent);
+        setAuthorityAndPassword(newStudent, oldStudent);
         studentRepo.save(newStudent);
+    }
+
+    private void setAuthorityAndPassword(Student newStudent, Student oldStudent) {
+        User user = newStudent.getUser();
+        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
+        user.setPassword(oldStudent.getUser().getPassword());
+        newStudent.setUser(user);
+        setAuthority(newStudent);
     }
 
     private void setAuthority(Student student) {

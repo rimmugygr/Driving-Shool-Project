@@ -1,4 +1,4 @@
-package driving.school.dto;
+package driving.school.dto.response;
 
 
 import lombok.*;
@@ -10,7 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class UserDto {
+public class ProfileResponse {
     private Long id;
     private String username;
+    private String type;
 }

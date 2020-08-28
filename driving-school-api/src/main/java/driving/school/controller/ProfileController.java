@@ -1,7 +1,8 @@
 package driving.school.controller;
 
 
-import driving.school.dto.ProfileDto;
+import driving.school.dto.request.ProfileRequest;
+import driving.school.dto.response.ProfileResponse;
 import driving.school.security.CurrentUsername;
 import driving.school.dto.response.JwtResponse;
 import driving.school.dto.request.LoginRequest;
@@ -26,13 +27,13 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(@CurrentUsername String username) {
-        ProfileDto profile = profileServices.getProfile(username);
+        ProfileResponse profile = profileServices.getProfile(username);
         return ResponseEntity.ok(profile);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<Void> putProfile(@CurrentUsername String username, ProfileDto profileDto) {
-        profileServices.updateProfile(username, profileDto);
+    public ResponseEntity<Void> putProfile(@CurrentUsername String username, ProfileRequest profileRequest) {
+        profileServices.updateProfile(username, profileRequest);
         return ResponseEntity.ok().build();
     }
 

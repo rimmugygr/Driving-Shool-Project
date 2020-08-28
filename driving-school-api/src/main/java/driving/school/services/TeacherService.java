@@ -32,12 +32,19 @@ public class TeacherService {
         return teacher.getId();
     }
 
-    public void putTeacherById(Long id, Teacher newTeacher) {
-        Teacher oldTeacher = getTeacherById(id);
+    public void putTeacherById(Long teacherId, Teacher newTeacher) {
+        Teacher oldTeacher = getTeacherById(teacherId);
         isValidUsername(newTeacher,oldTeacher);
-        newTeacher.setId(id);
-        setAuthority(newTeacher);
+        setParameter(teacherId, newTeacher);
         teacherRepo.save(newTeacher);
+    }
+
+    private void setParameter(Long teacherId, Teacher newTeacher) {
+        newTeacher.setId(teacherId);
+        User user = newTeacher.getUser();
+        user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
+        user.setPassword(newTeacher.getUser().getPassword());
+        newTeacher.setUser(user);
     }
 
     private void setAuthority(Teacher teacher) {

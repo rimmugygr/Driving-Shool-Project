@@ -1,8 +1,9 @@
 package driving.school.services;
 
 import driving.school.dto.request.LoginRequest;
+import driving.school.dto.request.ProfileRequest;
 import driving.school.dto.response.JwtResponse;
-import driving.school.dto.ProfileDto;
+import driving.school.dto.response.ProfileResponse;
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.model.user.Role;
 import driving.school.model.user.User;
@@ -28,7 +29,7 @@ public class ProfileServices {
     private final JwtUtils jwtUtils;
     private final PasswordEncoder encoder;
 
-    public ProfileDto getProfile(String username) {
+    public ProfileResponse getProfile(String username) {
         User user = userService.getUser(username);
         String profileType = Role.ADMIN.name();
         if (user.getTeacher() != null) {
@@ -36,10 +37,9 @@ public class ProfileServices {
         } else if (user.getStudent() != null) {
             profileType = Role.STUDENT.name();
         }
-        return ProfileDto.builder()
+        return ProfileResponse.builder()
                 .id(user.getId())
                 .username(username)
-                .password(encoder.encode(user.getPassword()))
                 .type(profileType)
                 .build();
     }
@@ -63,13 +63,14 @@ public class ProfileServices {
                 authorities);
     }
 
-    public void updateProfile(String username, ProfileDto profileDto) {
+    public void updateProfile(String username, ProfileRequest profileRequest) {
         User user = userService.getUser(username);
-        user.setPassword(encoder.encode(profileDto.getPassword()));
+        user.setPassword(encoder.encode(profileRequest.getPassword()));
         if(!user.getUsername().equals(username) && !userService.isUniqueUsername(user)){
             throw new DuplicateUniqueKey("Username '" + user.getUsername() + "' already exist");
         } else {
-            user.setUsername(profileDto.getUsername());
+            user.setUsername(profileRequest.getUsername());
         }
+        userService.saveUser(user);
     }
 }
