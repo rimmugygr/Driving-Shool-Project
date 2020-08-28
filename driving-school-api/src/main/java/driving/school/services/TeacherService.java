@@ -3,17 +3,18 @@ package driving.school.services;
 
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.exceptions.ResourcesNotFound;
-import driving.school.model.user.Teacher;
+import driving.school.model.user.*;
 import driving.school.repository.TeacherRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
 public class TeacherService {
-    TeacherRepo teacherRepo;
-    UserService userService;
+    private final TeacherRepo teacherRepo;
+    private final UserService userService;
 
     public List<Teacher> getAllTeacher() {
         return teacherRepo.findAll();
@@ -21,12 +22,13 @@ public class TeacherService {
 
     public Teacher getTeacherById(Long id) {
         return teacherRepo.findById(id)
-                .orElseThrow(() ->new ResourcesNotFound("Teacher on Id '"+ id +"' not exist"));
+                .orElseThrow(() ->new ResourcesNotFound("Teacher on id '"+ id +"' not exist"));
     }
 
     public Long addTeacher(Teacher teacher){
         isUniqueUsername(teacher);
         teacherRepo.save(teacher);
+        setAuthority(teacher);
         return teacher.getId();
     }
 
@@ -34,7 +36,14 @@ public class TeacherService {
         Teacher oldTeacher = getTeacherById(id);
         isValidUsername(newTeacher,oldTeacher);
         newTeacher.setId(id);
+        setAuthority(newTeacher);
         teacherRepo.save(newTeacher);
+    }
+
+    private void setAuthority(Teacher teacher) {
+        User user = teacher.getUser();
+        user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
+        teacher.setUser(user);
     }
 
     public void deleteTeacherById(Long id) {
@@ -62,5 +71,9 @@ public class TeacherService {
             if(!userService.isUniqueUsername(teacher.getUser()))
                 throw new DuplicateUniqueKey("Username '" + teacher.getUser().getUsername() + "' already exist");
         }
+    }
+
+    public Teacher getTeacherByUserId(Long userId) {
+        return teacherRepo.getByUserId(userId);
     }
 }

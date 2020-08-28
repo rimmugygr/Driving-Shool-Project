@@ -24,6 +24,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_name"))
     private Set<Authority> roles = new HashSet<>();
+    @ManyToOne
+    private Student student;
+    @ManyToOne
+    private Teacher teacher;
 
     public User(User user) {
         this.id = user.id;

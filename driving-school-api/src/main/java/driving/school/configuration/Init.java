@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class Init {
     private final PasswordEncoder encoder;
     @Bean
-    //@Profile("!prod")
+    @Profile("!prod")
     public ApplicationRunner initializer(AuthorityRepo authorityRepository,
                                          TeacherRepo teacherRepo,
                                          StudentRepo studentRepo,
@@ -39,7 +39,7 @@ public class Init {
                     .user(User.builder()
                             .username("student")
                             .password(encoder.encode("student"))
-                            .roles(Set.of(Authority.builder().name(Role.ROLE_STUDENT).build()))
+                            .roles(Set.of(Authority.builder().name(Role.STUDENT).build()))
                             .build())
                     .build());
             teacherRepo.save(Teacher.builder()
@@ -48,13 +48,13 @@ public class Init {
                     .user(User.builder()
                             .username("teacher")
                             .password(encoder.encode("teacher"))
-                            .roles(Set.of(Authority.builder().name(Role.ROLE_TEACHER).build()))
+                            .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
                             .build())
                     .build());
             userRepo.save(User.builder()
                     .username("admin")
                     .password(encoder.encode("admin"))
-                    .roles(Set.of(Authority.builder().name(Role.ROLE_ADMIN).build()))
+                    .roles(Set.of(Authority.builder().name(Role.ADMIN).build()))
                     .build());
         };
     }

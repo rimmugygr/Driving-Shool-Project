@@ -35,9 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.
                 authorizeRequests()
+                .antMatchers("/api/auth/profile").authenticated()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/manage/**").hasAuthority(Role.ROLE_ADMIN.name())
-                .antMatchers("/api/teachers/**").hasAuthority(Role.ROLE_TEACHER.name())
+                .antMatchers("/api/manage/**").hasAuthority(Role.ADMIN.name())
+                .antMatchers("/api/teachers/**").hasAuthority(Role.TEACHER.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
@@ -68,6 +69,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

@@ -1,4 +1,4 @@
-package driving.school.dto;
+package driving.school.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

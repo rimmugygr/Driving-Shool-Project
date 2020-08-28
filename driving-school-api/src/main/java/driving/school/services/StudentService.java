@@ -2,11 +2,15 @@ package driving.school.services;
 
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.exceptions.ResourcesNotFound;
+import driving.school.model.user.Authority;
+import driving.school.model.user.Role;
 import driving.school.model.user.Student;
+import driving.school.model.user.User;
 import driving.school.repository.StudentRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -25,6 +29,7 @@ public class StudentService {
 
     public Long addStudent(Student student)  {
         isUniqueUsername(student);
+        setAuthority(student);
         return  studentRepo.save(student).getId();
     }
 
@@ -32,7 +37,14 @@ public class StudentService {
         Student oldStudent = getStudentById(id);
         isValidUsername(newStudent, oldStudent);
         newStudent.setId(id);
+        setAuthority(newStudent);
         studentRepo.save(newStudent);
+    }
+
+    private void setAuthority(Student student) {
+        User user = student.getUser();
+        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
+        student.setUser(user);
     }
 
     public void deleteStudentById(long id) {
@@ -69,5 +81,9 @@ public class StudentService {
             if(!userService.isUniqueUsername(student.getUser()))
                 throw new DuplicateUniqueKey("Username '" + student.getUser().getUsername() + "' already exist");
         }
+    }
+
+    public Student getStudentByUserId(Long userId) {
+        return studentRepo.getByUserId(userId);
     }
 }
