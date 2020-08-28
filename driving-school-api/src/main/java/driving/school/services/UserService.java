@@ -14,7 +14,6 @@ import java.util.Set;
 @Service
 public class UserService {
     private final UserRepo userRepository;
-    private final AuthorityRepo authorityRepository;
 
     public boolean isUniqueUsername(User user) {
         User userResult = userRepository.findUserByUsername(user.getUsername());

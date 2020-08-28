@@ -2,12 +2,9 @@ package driving.school.services;
 
 import driving.school.dto.request.LoginRequest;
 import driving.school.dto.response.JwtResponse;
-import driving.school.dto.response.ProfileDto;
-import driving.school.mapper.StudentMapper;
-import driving.school.mapper.TeacherMapper;
+import driving.school.dto.ProfileDto;
+import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.model.user.Role;
-import driving.school.model.user.Student;
-import driving.school.model.user.Teacher;
 import driving.school.model.user.User;
 import driving.school.security.components.JwtUtils;
 import lombok.AllArgsConstructor;
@@ -17,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +26,7 @@ public class ProfileServices {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final PasswordEncoder encoder;
 
     public ProfileDto getProfile(String username) {
         User user = userService.getUser(username);
@@ -40,7 +39,7 @@ public class ProfileServices {
         return ProfileDto.builder()
                 .id(user.getId())
                 .username(username)
-                .password(user.getPassword())
+                .password(encoder.encode(user.getPassword()))
                 .type(profileType)
                 .build();
     }
@@ -62,5 +61,15 @@ public class ProfileServices {
                 user.getId(),
                 userDetails.getUsername(),
                 authorities);
+    }
+
+    public void updateProfile(String username, ProfileDto profileDto) {
+        User user = userService.getUser(username);
+        user.setPassword(encoder.encode(profileDto.getPassword()));
+        if(!user.getUsername().equals(username) && !userService.isUniqueUsername(user)){
+            throw new DuplicateUniqueKey("Username '" + user.getUsername() + "' already exist");
+        } else {
+            user.setUsername(profileDto.getUsername());
+        }
     }
 }
