@@ -4,7 +4,6 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TeacherService} from '../../../../services/teacher.service';
 import {Teacher} from '../../../../model/Teacher';
 import {User} from '../../../../model/User';
-import {Student} from '../../../../model/Student';
 
 @Component({
   selector: 'app-teacher-edit-modal',

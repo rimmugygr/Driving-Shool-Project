@@ -67,7 +67,7 @@ class StudentManageControllerTest {
                     .hours(0)
                     .phone("12345")
                     .status(StudentStatus.Active)
-                    .user(UserDto.builder().username("00000").password("000000").build())
+                    .user(UserDto.builder().username("00000").build())
                     .build();
 
             requestStudentJson = mapper.writeValueAsString(anyStudent);
@@ -132,7 +132,7 @@ class StudentManageControllerTest {
                     .hours(0)
                     .phone("12345")
                     .status(StudentStatus.Active)
-                    .user(UserDto.builder().username("00000").password("000000").build())
+                    .user(UserDto.builder().username("00000").build())
                     .build();
 
             requestStudentJson = mapper.writeValueAsString(anyStudent);

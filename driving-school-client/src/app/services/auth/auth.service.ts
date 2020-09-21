@@ -44,9 +44,9 @@ export class AuthService {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
 
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showTeacherBoard = this.roles.includes('ROLE_TEACHER');
-      this.showStudentBoard = this.roles.includes('ROLE_STUDENT');
+      this.showAdminBoard = this.roles.includes('ADMIN');
+      this.showTeacherBoard = this.roles.includes('TEACHER');
+      this.showStudentBoard = this.roles.includes('STUDENT');
 
       this.username = user.username;
     }
