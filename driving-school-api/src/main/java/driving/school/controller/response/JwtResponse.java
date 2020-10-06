@@ -1,4 +1,4 @@
-package driving.school.dto.response;
+package driving.school.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

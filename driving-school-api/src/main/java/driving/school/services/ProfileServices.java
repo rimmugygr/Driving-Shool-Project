@@ -1,9 +1,9 @@
 package driving.school.services;
 
-import driving.school.dto.request.LoginRequest;
-import driving.school.dto.request.ProfileRequest;
-import driving.school.dto.response.JwtResponse;
-import driving.school.dto.response.ProfileResponse;
+import driving.school.controller.request.LoginRequest;
+import driving.school.controller.request.ProfileRequest;
+import driving.school.controller.response.JwtResponse;
+import driving.school.controller.response.ProfileResponse;
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.model.user.Role;
 import driving.school.model.user.User;

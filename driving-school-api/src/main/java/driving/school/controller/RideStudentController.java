@@ -1,7 +1,8 @@
 package driving.school.controller;
 
 
-import driving.school.model.RideDate;
+import driving.school.controller.request.SimpleDateRequest;
+import driving.school.dto.RideDateDto;
 import driving.school.services.RideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,30 +13,30 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/ride")
+@RequestMapping("/api/rides")
 public class RideStudentController {
     private final RideService rideService;
 
-    @GetMapping("/student/{studentId}")
+    @GetMapping("/students/{studentId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<RideDate> getAllRideByStudent(@PathVariable String studentId) {
+    public List<RideDateDto> getAllRideByStudent(@PathVariable Long studentId) {
         return rideService.getAllRideByStudentId(studentId);
     }
 
-    @PostMapping("/teacher/{teacherId}/student/{studentId}")
+    @PostMapping("/teachers/{teacherId}/students/{studentId}/date")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postRideByStudent(@PathVariable(name = "teacherId") String teacherId,
-                                  @PathVariable(name = "studentId") String studentId,
-                                  @RequestBody RideDate rideDate) throws SQLIntegrityConstraintViolationException {
-        rideService.addRideByStudent(studentId,teacherId, rideDate);
+    public void postRideByStudent(@PathVariable(name = "teacherId") Long teacherId,
+                                  @PathVariable(name = "studentId") Long studentId,
+                                  @RequestBody SimpleDateRequest date) throws SQLIntegrityConstraintViolationException {
+        rideService.addRideByStudent(studentId,teacherId, date);
     }
 
-    @DeleteMapping("/teacher/{teacherId}/student/{studentId}")
+    @DeleteMapping("/teacher/{teacherId}/student/{studentId}/date")
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void deleteRideByStudent(@PathVariable(name = "teacherId") String teacherId,
-                                    @PathVariable(name = "studentId") String studentId,
-                                    @RequestBody RideDate rideDate) {
-        rideService.deleteRideByStudent(studentId,teacherId, rideDate);
+    public void deleteRideByStudent(@PathVariable(name = "teacherId") Long teacherId,
+                                    @PathVariable(name = "studentId") Long studentId,
+                                    @RequestBody SimpleDateRequest date) {
+        rideService.deleteRideByStudent(studentId,teacherId, date);
     }
 
 }

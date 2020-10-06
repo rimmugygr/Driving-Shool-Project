@@ -1,11 +1,11 @@
 package driving.school.controller;
 
 
-import driving.school.dto.request.ProfileRequest;
-import driving.school.dto.response.ProfileResponse;
+import driving.school.controller.request.ProfileRequest;
+import driving.school.controller.response.ProfileResponse;
 import driving.school.security.CurrentUsername;
-import driving.school.dto.response.JwtResponse;
-import driving.school.dto.request.LoginRequest;
+import driving.school.controller.response.JwtResponse;
+import driving.school.controller.request.LoginRequest;
 import driving.school.services.ProfileServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

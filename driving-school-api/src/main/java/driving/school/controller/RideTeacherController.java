@@ -1,5 +1,6 @@
 package driving.school.controller;
 
+import driving.school.dto.RideDateDto;
 import driving.school.model.RideDate;
 import driving.school.services.RideService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class RideTeacherController {
 
     @GetMapping("/ride/teacher/{teacherId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<RideDate> getAllRideByTeacher(@PathVariable String teacherId) {
+    public List<RideDateDto> getAllRideByTeacher(@PathVariable Long teacherId) {
         return rideService.getAllRideByTeacherId(teacherId);
     }
 

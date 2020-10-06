@@ -1,6 +1,7 @@
 package driving.school.controller;
 
 
+import driving.school.dto.RideDateDto;
 import driving.school.model.RideDate;
 import driving.school.services.RideService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,13 @@ public class RideController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<RideDate> getAllRide() {
+    public List<RideDateDto> getAllRide() {
         return rideService.getAllRide();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RideDate getRide(@PathVariable String id) throws NoSuchElementException {
+    public RideDateDto getRide(@PathVariable Long id) throws NoSuchElementException {
         return rideService.getRideById(id);
     }
 

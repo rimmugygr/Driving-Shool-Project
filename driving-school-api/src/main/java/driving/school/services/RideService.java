@@ -1,66 +1,75 @@
 package driving.school.services;
 
 
+import driving.school.controller.request.SimpleDateRequest;
+import driving.school.dto.RideDateDto;
+import driving.school.mapper.RideDateMapper;
 import driving.school.model.RideDate;
 import driving.school.model.user.Student;
 import driving.school.model.user.Teacher;
 import driving.school.repository.AvailableDateRepo;
 import driving.school.repository.RideRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RideService {
-    RideRepo rideRepo;
-    AvailableDateRepo availableDateRepo;
+    private final RideRepo rideRepo;
+    private final RideDateMapper rideDateMapper;
+    private final AvailableDateRepo availableDateRepo;
 
-    public RideService(RideRepo rideRepo, AvailableDateRepo availableDateRepo) {
-        this.rideRepo = rideRepo;
-        this.availableDateRepo = availableDateRepo;
+    public List<RideDateDto> getAllRide() {
+        return rideRepo.findAll().stream()
+                .map(rideDateMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public List<RideDate> getAllRide() {
-        return rideRepo.findAll();
-    }
-
-    public RideDate getRideById(String id) throws NoSuchElementException {
-        return rideRepo.findById(Long.parseLong(id))
+    public RideDateDto getRideById(Long id) throws NoSuchElementException {
+        return rideRepo.findById(id)
+                .map(rideDateMapper::map)
                 .orElseThrow(()->new NoSuchElementException("#Errror Ride on Id '"+ id +"' not exist in data base"));
     }
 
-    public List<RideDate> getAllRideByStudentId(String id) {
-        return rideRepo.getAllByStudentId(Long.valueOf(id));
+    public List<RideDateDto> getAllRideByStudentId(Long id) {
+        return rideRepo.getAllByStudentId(id).stream()
+                .map(rideDateMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public List<RideDate> getAllRideByTeacherId(String id) {
-        return rideRepo.getAllByTeacherId(Long.valueOf(id));
+    public List<RideDateDto> getAllRideByTeacherId(Long id) {
+        return rideRepo.getAllByTeacherId(id).stream()
+                .map(rideDateMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public void addRideByStudent(String studentId, String teacherId, RideDate rideDate) throws SQLIntegrityConstraintViolationException {
+    public void addRideByStudent(Long studentId, Long teacherId, SimpleDateRequest dateRide) throws SQLIntegrityConstraintViolationException {
         RideDate newRideDate = new RideDate(
-                rideDate.getDate(),
-                new Student(Long.parseLong(studentId)),
-                new Teacher(Long.parseLong(teacherId))
+                dateRide.getDate(),
+                new Student(studentId),
+                new Teacher(teacherId)
         );
         rideRepo.save(newRideDate);
-        availableDateRepo.streamAvailableDateByTeacherIdAndDate(Long.parseLong(teacherId), rideDate.getDate())
+        availableDateRepo.streamAvailableDateByTeacherIdAndDate(teacherId, dateRide.getDate())
                 .forEach(x->x.setReserved(true));
     }
 
     @Transactional
-    public void deleteRideByStudent(String studentId, String teacherId, RideDate rideDate) {
+    public void deleteRideByStudent(Long studentId, Long teacherId, SimpleDateRequest dateRide) {
         RideDate newRideDate = new RideDate(
-                rideDate.getDate(),
-                new Student(Long.parseLong(studentId)),
-                new Teacher(Long.parseLong(teacherId))
+                dateRide.getDate(),
+                new Student(studentId),
+                new Teacher(teacherId)
         );
         rideRepo.delete(newRideDate);
-        availableDateRepo.streamAvailableDateByTeacherIdAndDate(Long.parseLong(teacherId), rideDate.getDate())
+        availableDateRepo.streamAvailableDateByTeacherIdAndDate(teacherId, dateRide.getDate())
                 .forEach(x->x.setReserved(false));
     }
 

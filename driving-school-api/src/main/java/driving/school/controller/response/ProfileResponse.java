@@ -1,8 +1,7 @@
-package driving.school.dto.request;
+package driving.school.controller.response;
 
 
 import lombok.*;
-
 
 @Builder
 @Getter
@@ -10,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ProfileRequest {
+public class ProfileResponse {
     private Long id;
     private String username;
-    private String password;
+    private String type;
 }
