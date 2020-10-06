@@ -2,13 +2,11 @@ package driving.school.services;
 
 
 import driving.school.model.AvailableDate;
-import driving.school.model.user.Teacher;
 import driving.school.repository.AvailableDateRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.util.List;
 

@@ -5,7 +5,7 @@ import driving.school.dto.AvailableDateDto;
 import driving.school.mapper.AvailableMapper;
 import driving.school.model.AvailableDate;
 import driving.school.services.AvailableService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +15,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/teachers")
 public class AvailableDateController {
-    AvailableService availableService;
-    AvailableMapper availableMapper;
+    private final AvailableService availableService;
+    private final AvailableMapper availableMapper;
 
     @GetMapping("/{teacherId}/available")
     public ResponseEntity<List<AvailableDateDto>> getAvailableRideByTeacher(@PathVariable long teacherId) {

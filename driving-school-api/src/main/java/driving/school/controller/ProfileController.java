@@ -7,13 +7,13 @@ import driving.school.security.CurrentUsername;
 import driving.school.dto.response.JwtResponse;
 import driving.school.dto.request.LoginRequest;
 import driving.school.services.ProfileServices;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class ProfileController {

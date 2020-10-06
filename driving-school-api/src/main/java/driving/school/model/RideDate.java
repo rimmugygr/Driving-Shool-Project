@@ -3,7 +3,6 @@ package driving.school.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.annotation.JsonView;
 import driving.school.model.user.Student;
 import driving.school.model.user.Teacher;
 import lombok.*;
@@ -19,8 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table( name = "ride_date",
-        uniqueConstraints = { @UniqueConstraint( columnNames = { "date", "student_id" } ) } )
+@Table( name = "ride_date", uniqueConstraints = { @UniqueConstraint( columnNames = { "date", "student_id" } ) } )
 public class RideDate extends BaseEntity {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -41,7 +39,6 @@ public class RideDate extends BaseEntity {
     @JsonIgnoreProperties( {"address","rideDates","availableDates","categoryList","updateDate","createDate"})
     private Teacher teacher;
 
-
     @Enumerated(EnumType.STRING)
     private RideStatus rideStatus;
 
@@ -51,6 +48,6 @@ public class RideDate extends BaseEntity {
         this.teacher = teacher;
     }
 
-    //    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
 //    private Category category;
 }

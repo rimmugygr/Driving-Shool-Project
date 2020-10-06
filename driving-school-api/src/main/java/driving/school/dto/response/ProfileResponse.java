@@ -3,7 +3,6 @@ package driving.school.dto.response;
 
 import lombok.*;
 
-
 @Builder
 @Getter
 @Setter

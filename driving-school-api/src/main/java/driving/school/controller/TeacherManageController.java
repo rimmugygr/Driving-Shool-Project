@@ -3,19 +3,19 @@ package driving.school.controller;
 import driving.school.dto.TeacherUserDto;
 import driving.school.mapper.TeacherMapper;
 import driving.school.services.TeacherService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/manage/teachers")
 public class TeacherManageController {
-    TeacherService teacherService;
-    TeacherMapper teacherMapper;
+    private final TeacherService teacherService;
+    private final TeacherMapper teacherMapper;
 
     @GetMapping
     public ResponseEntity<List<TeacherUserDto>> getAllTeacher() {

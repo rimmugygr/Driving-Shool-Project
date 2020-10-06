@@ -1,7 +1,5 @@
 package driving.school.model.user;
 
-
-import com.fasterxml.jackson.annotation.JsonView;
 import driving.school.model.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

@@ -7,14 +7,14 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table( name = "available_date",
-        uniqueConstraints = { @UniqueConstraint( columnNames = { "date", "teacher_id" } ) } )
+@Table( name = "available_date", uniqueConstraints = { @UniqueConstraint( columnNames = { "date", "teacher_id" } ) } )
 public class AvailableDate extends BaseEntity{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -30,5 +30,4 @@ public class AvailableDate extends BaseEntity{
 
 //    @Enumerated(EnumType.STRING)
 //    private Category category;
-
 }
