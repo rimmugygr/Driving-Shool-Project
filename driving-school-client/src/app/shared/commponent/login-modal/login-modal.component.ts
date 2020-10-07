@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../auth/auth.service';
-import {TokenStorageService} from '../../auth/token-storage.service';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {LoginRequest} from '../../model/Auth';
+import {Select, Store} from '@ngxs/store';
+import {UserAuthState} from '../../state/user-auth/user-auth.state';
+import {Observable} from 'rxjs';
+import {Login} from '../../state/user-auth/user-auth.actions';
 
 @Component({
   selector: 'app-login-modal',
@@ -10,41 +13,21 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class LoginModalComponent implements OnInit {
 
-  form: any = {};
-  isLoggedIn = false;
-  isLoginFailed = false;
-  errorMessage = '';
-  roles: string[] = [];
+  formLogin: LoginRequest = new LoginRequest();
 
-  constructor(private auth: AuthService,
-              private tokenStorage: TokenStorageService,
-              public modal: NgbActiveModal) { }
+  @Select(UserAuthState.isAuthenticated)
+  isLoggedIn$: Observable<boolean>;
+
+  @Select(UserAuthState.roles)
+  roles$: Observable<string[]>;
+
+  constructor(// public modal: NgbActiveModal,
+              private store: Store) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    this.auth.login(this.form).subscribe(
-      data => {
-        this.tokenStorage.saveToken(data.token);
-        this.tokenStorage.saveUser(data);
-
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
-      },
-      err => {
-        this.errorMessage = err.error.message;
-        this.isLoginFailed = true;
-      },
-      () => {
-        this.auth.initProfile();
-      }
-    );
-  }
-
-  reloadPage(): void {
-    window.location.reload();
+    this.store.dispatch(new Login( {  loginRequest: this.formLogin } ));
   }
 }

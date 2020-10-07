@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AuthGuard} from './shared/auth/auth.guard';
+import {AuthGuard} from './shared/guards/auth.guard';
 import {NotFoundPageComponent} from './pages/not-found-page/not-found-page.component';
 
 const routes: Routes = [

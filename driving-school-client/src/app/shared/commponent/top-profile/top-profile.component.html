@@ -1,15 +1,15 @@
 <div class="content">
   <div>
 
-    <button class="btn-primary mr-2" mat-raised-button (click)="openLoginModal()" *ngIf="!isLoggedIn">
+    <button class="btn-primary mr-2" mat-raised-button (click)="openLoginModal()" *ngIf="!(isLoggedIn$ | async)">
       Login
     </button>
-    <button class="btn-primary mr-2" mat-raised-button (click)="logout()"  *ngIf="isLoggedIn">
+    <button class="btn-primary mr-2" mat-raised-button (click)="logout()"  *ngIf="isLoggedIn$ | async">
       Logout
     </button>
     <strong>{{placeName}} </strong>
-    <div *ngIf="isLoggedIn">
-       | Logged as {{ username }} with {{ roles }}.
+    <div *ngIf="isLoggedIn$ | async">
+       | Logged as {{ username$ | async }} with {{ roles$ | async }}.
     </div>
   </div>
 
