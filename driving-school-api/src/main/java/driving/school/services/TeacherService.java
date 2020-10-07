@@ -6,6 +6,7 @@ import driving.school.exceptions.ResourcesNotFound;
 import driving.school.model.user.*;
 import driving.school.repository.TeacherRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.Set;
 public class TeacherService {
     private final TeacherRepo teacherRepo;
     private final UserService userService;
+    private final PasswordEncoder encoder;
 
     public List<Teacher> getAllTeacher() {
         return teacherRepo.findAll();
@@ -28,29 +30,23 @@ public class TeacherService {
     public Long addTeacher(Teacher teacher){
         isUniqueUsername(teacher);
         teacherRepo.save(teacher);
-        setAuthority(teacher);
+        teacher.setUser(getUserWithAuthorityAndPasswordEncode(teacher));
         return teacher.getId();
     }
 
     public void putTeacherById(Long teacherId, Teacher newTeacher) {
         Teacher oldTeacher = getTeacherById(teacherId);
         isValidUsername(newTeacher,oldTeacher);
-        setParameter(teacherId, newTeacher);
+        newTeacher.setId(teacherId);
+        newTeacher.setUser(getUserWithAuthorityAndPasswordEncode(newTeacher));
         teacherRepo.save(newTeacher);
     }
 
-    private void setParameter(Long teacherId, Teacher newTeacher) {
-        newTeacher.setId(teacherId);
-        User user = newTeacher.getUser();
-        user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
-        user.setPassword(newTeacher.getUser().getPassword());
-        newTeacher.setUser(user);
-    }
-
-    private void setAuthority(Teacher teacher) {
+    private User getUserWithAuthorityAndPasswordEncode(Teacher teacher) {
         User user = teacher.getUser();
-        user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
-        teacher.setUser(user);
+        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
+        user.setPassword(encoder.encode(teacher.getUser().getPassword()));
+        return user;
     }
 
     public void deleteTeacherById(Long id) {

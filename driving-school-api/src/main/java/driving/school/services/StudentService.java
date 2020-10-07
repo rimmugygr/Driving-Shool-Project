@@ -8,6 +8,7 @@ import driving.school.model.user.Student;
 import driving.school.model.user.User;
 import driving.school.repository.StudentRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class StudentService {
     private final StudentRepo studentRepo;
     private final UserService userService;
+    private final PasswordEncoder encoder;
 
     public List<Student> getAllStudent() {
         return studentRepo.findAll();
@@ -29,7 +31,7 @@ public class StudentService {
 
     public Long addStudent(Student student)  {
         isUniqueUsername(student);
-        setAuthority(student);
+        student.setUser(getUserWithAuthorityAndPasswordEncode(student));
         return  studentRepo.save(student).getId();
     }
 
@@ -37,22 +39,15 @@ public class StudentService {
         Student oldStudent = getStudentById(id);
         isValidUsername(newStudent, oldStudent);
         newStudent.setId(id);
-        setAuthorityAndPassword(newStudent, oldStudent);
+        newStudent.setUser(getUserWithAuthorityAndPasswordEncode(newStudent));
         studentRepo.save(newStudent);
     }
 
-    private void setAuthorityAndPassword(Student newStudent, Student oldStudent) {
-        User user = newStudent.getUser();
-        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
-        user.setPassword(oldStudent.getUser().getPassword());
-        newStudent.setUser(user);
-        setAuthority(newStudent);
-    }
-
-    private void setAuthority(Student student) {
+    private User getUserWithAuthorityAndPasswordEncode(Student student) {
         User user = student.getUser();
         user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
-        student.setUser(user);
+        user.setPassword(encoder.encode(student.getUser().getPassword()));
+        return user;
     }
 
     public void deleteStudentById(long id) {

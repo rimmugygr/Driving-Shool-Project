@@ -1,8 +1,6 @@
 package driving.school.dto;
 
-
 import lombok.*;
-
 
 @Builder
 @Getter
@@ -13,4 +11,5 @@ import lombok.*;
 public class UserDto {
     private Long id;
     private String username;
+    private String password;
 }
