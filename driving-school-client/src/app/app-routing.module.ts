@@ -1,47 +1,36 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {HomeComponent} from './pages/home/home.component';
-import {StudentListComponent} from './pages/student-list/student-list.component';
-import {TeacherListComponent} from './pages/teacher-list/teacher-list.component';
-import {AvailableDateComponent} from './pages/available-date/available-date.component';
-import {AuthGuard} from './services/auth/auth.guard';
-import {LoginModalComponent} from './pages/commons/login-modal/login-modal.component';
-
-
+import {AuthGuard} from './shared/auth/auth.guard';
+import {NotFoundPageComponent} from './pages/not-found-page/not-found-page.component';
 
 const routes: Routes = [
   {
+    path: `home`,
+    loadChildren: () => import('./pages/home-page/home-page.module').then(m => m.HomePageModule)
+  },
+  {
     path: 'student',
-    component: StudentListComponent,
+    loadChildren: () => import('./pages/student-page/student-page.module').then(m => m.StudentPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'teacher',
-    component: TeacherListComponent,
+    loadChildren: () => import('./pages/teacher-page/teacher-page.module').then(m => m.TeacherPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'available',
-    component: AvailableDateComponent,
+    loadChildren: () => import('./pages/available-date-page/available-date-page.module').then(m => m.AvailableDatePageModule),
     canActivate: [AuthGuard]
   },
   {
-    path: 'tech',
-    component: HomeComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'stud',
-    component: HomeComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'home',
-    component: HomeComponent
+    path: ``,
+    redirectTo: `/home`,
+    pathMatch: `full`
   },
   {
     path: '**',
-    component: HomeComponent
+    component: NotFoundPageComponent
   }
 ];
 
