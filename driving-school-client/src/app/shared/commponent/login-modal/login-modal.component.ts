@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {LoginRequest} from '../../model/Auth';
 import {Select, Store} from '@ngxs/store';
 import {UserAuthState} from '../../state/user-auth/user-auth.state';
@@ -21,13 +21,14 @@ export class LoginModalComponent implements OnInit {
   @Select(UserAuthState.roles)
   roles$: Observable<string[]>;
 
-  constructor(// public modal: NgbActiveModal,
-              private store: Store) { }
+  constructor( private modal: NgbActiveModal,
+               private store: Store) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
     this.store.dispatch(new Login( {  loginRequest: this.formLogin } ));
+    this.modal.close();
   }
 }
