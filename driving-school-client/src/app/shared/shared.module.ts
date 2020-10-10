@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {LoginModalComponent} from './commponent/login-modal/login-modal.component';
-import {TopProfileComponent} from './commponent/top-profile/top-profile.component';
+import {LoginModalComponent} from './components/login-modal/login-modal.component';
+import {TopProfileComponent} from './components/top-profile/top-profile.component';
 import {WhenDirective} from './directive/when.directive';
 import {AddTargetDirective} from './directive/add-target.directive';
 import {AttachToDirective} from './directive/attach-to.directive';
@@ -26,6 +26,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {RouterModule} from '@angular/router';
+import { TeacherFormModalComponent } from './components/teacher-form-modal/teacher-form-modal.component';
 
 
 
@@ -38,7 +39,8 @@ import {RouterModule} from '@angular/router';
     AttachToDirective,
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    TeacherFormModalComponent
   ],
   imports: [
     CommonModule,

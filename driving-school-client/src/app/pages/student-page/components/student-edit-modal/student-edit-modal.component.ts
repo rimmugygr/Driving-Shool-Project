@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Student} from '../../../../shared/model/Student';
 import {StudentService} from '../../../../shared/services/student.service';
 import {User} from '../../../../shared/model/User';
+import {IStudent} from '../../../../shared/model/Student';
 
 @Component({
   selector: 'app-student-edit-modal',
@@ -13,7 +13,7 @@ import {User} from '../../../../shared/model/User';
 export class StudentEditModalComponent implements OnInit {
   @Input() studentId;
   @Input() userId;
-  student: Student = new Student();
+  student: IStudent;
   hide = true;
   message = '';
   studentEditedSaved = false;
@@ -30,7 +30,7 @@ export class StudentEditModalComponent implements OnInit {
   }
 
   submitPost(): void {
-    let newStudent: Student;
+    let newStudent: IStudent;
     if (this.postForm.valid) {
       this.message = 'send data to server';
       newStudent = this.postForm.value;
@@ -51,7 +51,7 @@ export class StudentEditModalComponent implements OnInit {
 
   private getStudentThenInitForm(): void {
     this.studentService.getStudent(this.studentId).subscribe(
-      data => this.student = data as Student,
+      data => this.student = data as IStudent,
       error => console.error(error),
       () => {
         console.log('success load student');

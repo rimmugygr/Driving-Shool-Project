@@ -1,8 +1,6 @@
-import {User} from './User';
+import {IUser, User} from './User';
 
-export class  Student {
-
-
+export class Student implements IStudent{
   public id: number;
   public firstName: string;
   public lastName: string;
@@ -15,4 +13,18 @@ export class  Student {
   public createDate: string;
   public updateDate: string;
   public user: User;
+}
+export interface IStudent {
+  id: number;
+  firstName: string;
+  lastName: string;
+  categoryList: string[];
+  status: string;
+  hours: number;
+  address: string;
+  email: string;
+  phone: number;
+  createDate: string;
+  updateDate: string;
+  user: IUser;
 }

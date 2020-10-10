@@ -16,8 +16,10 @@ import {UserAuthState} from './shared/state/user-auth/user-auth.state';
 import {routeHandlerProviders} from './shared/handlers/route.handler';
 import {ToastrModule} from 'ngx-toastr';
 import {messageHandlerProviders} from './shared/handlers/message.handler';
+import {StudentsListState} from './shared/state/students-list/students-list.state';
+import {TeacherListState} from './shared/state/teacher-list/teacher-list.state';
 
-const persistentStates: StateClass<any>[] = [UserAuthState];
+const persistentStates: StateClass<any>[] = [UserAuthState, StudentsListState, TeacherListState];
 const states: StateClass<any>[] = [...persistentStates];
 
 @NgModule({

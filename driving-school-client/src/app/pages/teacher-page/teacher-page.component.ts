@@ -1,76 +1,115 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {TeacherService} from '../../shared/services/teacher.service';
-import {TeacherEditModalComponent} from './components/teacher-edit-modal/teacher-edit-modal.component';
-import {TeacherAddModalComponent} from './components/teacher-add-modal/teacher-add-modal.component';
 import {TeacherDeleteModalComponent} from './components/teacher-delete-modal/teacher-delete-modal.component';
+import {TeacherFormModalComponent} from '../../shared/components/teacher-form-modal/teacher-form-modal.component';
+import {FORM_PAGE_MODE} from '../../shared/model/FormPageMode';
+import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
+import {TeacherListState} from '../../shared/state/teacher-list/teacher-list.state';
+import {debounceTime, map} from 'rxjs/operators';
+import {FetchTeachers} from '../../shared/state/teacher-list/teacher-list.actions';
+import {ITeacher} from '../../shared/model/Teacher';
 
 @Component({
   selector: 'app-teacher-list',
   templateUrl: './teacher-page.component.html',
   styleUrls: ['./teacher-page.component.css']
 })
-export class TeacherPageComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'createDate', 'updateDate', 'action'];
-  public teachers;
-  isLoading = true;
+export class TeacherPageComponent implements AfterViewInit, OnInit {
   placeName = `Teacher List`;
-  @ViewChild(MatPaginator, {static: true})
-  paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true})
-  sort: MatSort;
+  displayedOnlyDataColumns: string[] =  ['id', 'firstName', 'lastName', 'createDate', 'updateDate'];
+  displayedColumns: string[] = [...this.displayedOnlyDataColumns, 'action'];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  isLoading = true;
+  tableTeachersLength = 0;
+  tableTeachersNoFilter$: Observable<MatTableDataSource<ITeacher>>;
+  tableTeachers$: Observable<MatTableDataSource<ITeacher>>;
+  private searchSubject = new Subject<string>();
+  searchAction$: Observable<string>;
+  filterAction$: Observable<string>;
 
-  constructor(private teacherService: TeacherService,
-              private modalService: NgbModal) { }
+  @Select(TeacherListState.getAllTeachers)
+  teachers$: Observable<ITeacher[]>;
 
-  ngOnInit(): void {
-    this.getAllTeacher();
+  constructor(private modalService: NgbModal,
+              private store: Store) {
+    this.tableTeachersNoFilter$ = merge(this.teachers$)
+      .pipe(
+        map( teachers => {
+          const tableTeachers = new MatTableDataSource(teachers as ITeacher[]);
+          tableTeachers.paginator = this.paginator;
+          tableTeachers.sort = this.sort;
+          this.isLoading = false;
+          this.tableTeachersLength = tableTeachers.data.length;
+          return tableTeachers;
+        })
+      );
+
+    this.filterAction$ = merge(
+      this.searchSubject.asObservable().pipe(debounceTime(1000)),
+      of('')
+    );
+
+    this.tableTeachers$ = combineLatest([this.tableTeachersNoFilter$, this.filterAction$])
+      .pipe(
+        map(([tableTeachers, search]) => {
+          tableTeachers.filter = search.trim().toLowerCase();
+          if (tableTeachers.paginator) {
+            tableTeachers.paginator.firstPage();
+          }
+          return tableTeachers;
+        })
+      );
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.teachers.filter = filterValue.trim().toLowerCase();
+  ngAfterViewInit(): void {
+    this.getAllTeacher();
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+  }
 
-    if (this.teachers.paginator) {
-      this.teachers.paginator.firstPage();
-    }
+  ngOnInit(): void {
   }
 
   getAllTeacher(): void {
-    this.teacherService.getAllTeacher().subscribe(
-      data => this.teachers = new MatTableDataSource(data),
-      err => console.error(err),
-      () => {
-        console.log('teachers loaded');
-        this.teachers.paginator = this.paginator;
-        this.paginator.pageSize = 20;
-        this.teachers.sort = this.sort;
-        this.isLoading = false;
+    this.store.dispatch(new FetchTeachers());
+  }
 
-      }
-    );
+  onInputTextFilter(text: string): void {
+    this.searchSubject.next(text);
   }
 
   openEditTeacherModal(teacherId: number, userId: number): void {
-    const modalRef = this.modalService.open(TeacherEditModalComponent);
+    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.EDIT;
+    modalRef.componentInstance.teacherId = teacherId;
+    modalRef.componentInstance.userId = userId;
+  }
+
+  openViewTeacherModal(teacherId: number, userId: number): void {
+    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DETAILS;
     modalRef.componentInstance.teacherId = teacherId;
     modalRef.componentInstance.userId = userId;
   }
 
   openDeleteTeacherModal(teacherId: number, userId: number): void {
-    const modalRef = this.modalService.open(TeacherDeleteModalComponent);
+    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DELETE;
     modalRef.componentInstance.teacherId = teacherId;
     modalRef.componentInstance.userId = userId;
   }
 
   openAddTeacherModal(): void {
-    const modalRef = this.modalService.open(TeacherAddModalComponent);
+    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.CREATE;
   }
 
   refreshList(): void {
+    this.isLoading = true;
     this.getAllTeacher();
   }
 }

@@ -1,4 +1,10 @@
-export class StudentsListAction {
-  public static readonly type = '[StudentsList] Add item';
-  constructor(public payload: string) { }
+import {IStudent} from '../../model/Student';
+
+export class FetchStudents {
+  public static readonly type = '[StudentsList]  Fetch all students';
+}
+
+export class CreateStudent {
+  public static readonly type = '[StudentsList] Create student';
+  constructor(public payload: {student: IStudent}) { }
 }

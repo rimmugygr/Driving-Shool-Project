@@ -1,13 +1,17 @@
-import {Component, OnInit, Type, ViewChild} from '@angular/core';
-import {StudentService} from '../../shared/services/student.service';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {StudentEditModalComponent} from './components/student-edit-modal/student-edit-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {StudentAddModalComponent} from './components/student-add-modal/student-add-modal.component';
-import {Student} from '../../shared/model/Student';
+import {IStudent} from '../../shared/model/Student';
 import {StudentDeleteModalComponent} from './components/student-delete-modal/student-delete-modal.component';
+import {Select, Store} from '@ngxs/store';
+import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
+import {StudentsListState} from '../../shared/state/students-list/students-list.state';
+import {debounceTime, map} from 'rxjs/operators';
+import {FetchStudents} from '../../shared/state/students-list/students-list.actions';
 
 @Component({
   selector: 'app-student-list',
@@ -16,47 +20,64 @@ import {StudentDeleteModalComponent} from './components/student-delete-modal/stu
 })
 
 
-
-export class StudentPageComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'address', 'hours', 'status', 'category', 'createDate', 'action'];
-  public students;
-  @ViewChild(MatPaginator, {static: true})
-  paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true})
-  sort: MatSort;
-  isLoading = true;
+export class StudentPageComponent implements AfterViewInit, OnInit{
   placeName = `Student List`;
+  displayedOnlyDataColumns: string[] = ['id', 'firstName', 'lastName', 'address', 'hours', 'status', 'category', 'createDate'];
+  displayedColumns: string[] = [...this.displayedOnlyDataColumns, 'action'];
+  @ViewChild(MatPaginator)  paginator: MatPaginator;
+  @ViewChild(MatSort)  sort: MatSort;
+  isLoading = true;
+  tableStudentsLength = 0;
+  tableStudentsNoFilter$: Observable<MatTableDataSource<IStudent>>;
+  tableStudents$: Observable<MatTableDataSource<IStudent>>;
+  private searchSubject = new Subject<string>();
+  searchAction$: Observable<string>;
+  filterAction$: Observable<string>;
 
-  constructor(private studentService: StudentService,
-              private modalService: NgbModal) { }
+  @Select(StudentsListState.getAllStudents)
+  students$: Observable<IStudent[]>;
 
+  constructor(private modalService: NgbModal,
+              private store: Store) {
+    this.tableStudentsNoFilter$ = merge(this.students$)
+     .pipe(
+       map( student => {
+         const tableStudents = new MatTableDataSource(student as IStudent[]);
+         tableStudents.paginator = this.paginator;
+         tableStudents.sort = this.sort;
+         this.isLoading = false;
+         this.tableStudentsLength = tableStudents.data.length;
+         return tableStudents;
+       })
+     );
 
-  ngOnInit(): void {
-    this.getAllStudent();
+    this.filterAction$ = merge(
+      this.searchSubject.asObservable().pipe(debounceTime(1000)),
+      of('')
+    );
+
+    this.tableStudents$ = combineLatest([this.tableStudentsNoFilter$, this.filterAction$])
+     .pipe(
+       map(([tableStudents, search]) => {
+         tableStudents.filter = search.trim().toLowerCase();
+         if (tableStudents.paginator) {
+           tableStudents.paginator.firstPage();
+         }
+         return tableStudents;
+       })
+     );
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.students.filter = filterValue.trim().toLowerCase();
+  ngAfterViewInit(): void {
+    this.getAllStudent();
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+  }
 
-    if (this.students.paginator) {
-      this.students.paginator.firstPage();
-    }
+  ngOnInit(): void {
   }
 
   getAllStudent(): void {
-    this.studentService.getAllStudent().subscribe(
-      data => this.students = new MatTableDataSource(data as Student[]),
-      err => console.error(err),
-      () => {
-        console.log('student loaded');
-        this.students.paginator = this.paginator;
-        this.paginator.pageSize = 20;
-        this.students.sort = this.sort;
-        this.isLoading = false;
-
-      }
-    );
+    this.store.dispatch(new FetchStudents());
   }
 
   openEditStudentModal(studentId: number, userId: number): void {
@@ -66,7 +87,7 @@ export class StudentPageComponent implements OnInit {
   }
 
   openAddStudentModal(): void {
-    const modalRef = this.modalService.open(StudentAddModalComponent);
+    this.modalService.open(StudentAddModalComponent);
   }
 
   openDeleteStudentModal(studentId: number, userId: number): void  {
@@ -76,6 +97,17 @@ export class StudentPageComponent implements OnInit {
   }
 
   refreshList(): void {
+    this.isLoading = true;
     this.getAllStudent();
+  }
+
+  onInputTextFilter(text: string): void {
+    this.searchSubject.next(text);
+  }
+
+  openViewTeacherModal(studentId: number, userId: number): void {
+    const modalRef = this.modalService.open(StudentEditModalComponent);
+    modalRef.componentInstance.studentId = studentId;
+    modalRef.componentInstance.userId = userId;
   }
 }

@@ -1,6 +1,3 @@
-
-
-
 <form [formGroup]="postForm" (ngSubmit)="submitPost()" *ngIf="postForm">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title" >Edit Student {{student.firstName}} {{student.lastName}} On Id {{student.id}} </h4>
@@ -10,9 +7,6 @@
   </div>
 
   <div class="modal-body">
-
-
-
 
     <mat-form-field appearance="outline">
       <mat-label>FirstName</mat-label>
@@ -30,6 +24,7 @@
       <mat-label>Address</mat-label>
       <input matInput formControlName="address">
     </mat-form-field>
+
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input matInput  formControlName="email">
@@ -66,9 +61,6 @@
 
     <br>
 
-
-
-
     <mat-form-field appearance="outline">
       <mat-label>Hours</mat-label>
       <input matInput formControlName="hours" >
@@ -78,16 +70,6 @@
       <mat-label>CreateDate</mat-label>
       <input matInput formControlName="createDate" >
     </mat-form-field>
-
-
-
-
-
-
-
-
-
-
 
   </div>
 

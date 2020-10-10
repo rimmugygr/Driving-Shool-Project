@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Student} from '../model/Student';
+import {IStudent} from '../model/Student';
 
 const STUDENT_API = '/server/api/manage/students';
 const httpHeaders = {
@@ -15,30 +15,22 @@ export class StudentService {
 
   constructor(private http: HttpClient) { }
 
-  getAllStudent(): Observable<any> {
-    return this.http.get(STUDENT_API);
+  getAllStudentsResponse(): Observable<IStudent[]> {
+    return this.http.get<IStudent[]>(STUDENT_API);
   }
 
-  getStudent(studentId: number): Observable<any> {
-    return this.http.get(STUDENT_API + '/' + studentId);
+  getStudent(studentId: number): Observable<IStudent> {
+    return this.http.get<IStudent>(STUDENT_API + '/' + studentId);
   }
 
-  addStudent(student: Student): Observable<any>  {
-    return this.http.post(
-      STUDENT_API,
-      JSON.stringify(student),
-      httpHeaders
-    );
+  postStudent(student: IStudent): Observable<IStudent>  {
+    return this.http.post<IStudent>(STUDENT_API, JSON.stringify(student), httpHeaders);
   }
 
-  patchStudent(student: Student, studentId: number): Observable<any>  {
-    return this.http.put(
-      STUDENT_API + '/' + studentId,
-      JSON.stringify(student),
-      httpHeaders
-    );
+  patchStudent(student: IStudent, studentId: number): Observable<IStudent>  {
+    return this.http.put<IStudent>(STUDENT_API + '/' + studentId, JSON.stringify(student), httpHeaders);
   }
-  deleteStudent(studentId: number): Observable<any>  {
-    return this.http.delete(STUDENT_API + '/' + studentId);
+  deleteStudent(studentId: number): Observable<IStudent>  {
+    return this.http.delete<IStudent>(STUDENT_API + '/' + studentId);
   }
 }

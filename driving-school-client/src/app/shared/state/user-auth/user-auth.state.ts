@@ -67,8 +67,9 @@ export class UserAuthState {
           roles: result.roles
         }),
       err => {
-          throw new Error(err.error.message);
-        },
+        console.log(JSON.stringify(err));
+        throw new Error('a');
+      },
       () => {}
       );
   }

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {StudentService} from '../../../../shared/services/student.service';
-import {Student} from '../../../../shared/model/Student';
+import {IStudent} from '../../../../shared/model/Student';
 
 @Component({
   selector: 'app-student-delete-modal',
@@ -10,7 +10,7 @@ import {Student} from '../../../../shared/model/Student';
 })
 export class StudentDeleteModalComponent implements OnInit {
   @Input() studentId;
-  student: Student = new Student();
+  student: IStudent;
   message: string;
   deleted = false;
 
@@ -34,7 +34,7 @@ export class StudentDeleteModalComponent implements OnInit {
 
   private getStudent(): void {
     this.studentService.getStudent(this.studentId).subscribe(
-      data => this.student = data as Student,
+      data => this.student = data as IStudent,
       error => console.error(error),
       () => console.log('success load student')
     );

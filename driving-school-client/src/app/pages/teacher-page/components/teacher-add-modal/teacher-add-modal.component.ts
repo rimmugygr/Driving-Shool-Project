@@ -30,7 +30,7 @@ export class TeacherAddModalComponent implements OnInit {
       this.message = 'send data to server';
       newTeacher = this.postForm.value as Teacher;
       newTeacher.user = new User( null, this.postForm.value.username, this.postForm.value.password);
-      this.teacherService.addTeacher(newTeacher).subscribe(
+      this.teacherService.postTeacher(newTeacher).subscribe(
         () => { } ,
         error => { this.message = 'Error ' + JSON.stringify(error.error); },
         () => this.message = 'Added ' + newTeacher.firstName + ' ' + newTeacher.lastName

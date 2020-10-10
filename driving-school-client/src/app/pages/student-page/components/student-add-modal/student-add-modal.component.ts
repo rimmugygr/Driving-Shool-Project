@@ -1,9 +1,10 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {StudentService} from '../../../../shared/services/student.service';
-import { Student, } from '../../../../shared/model/Student';
+import {IStudent} from '../../../../shared/model/Student';
 import {User} from '../../../../shared/model/User';
+import {CreateStudent, FetchStudents} from '../../../../shared/state/students-list/students-list.actions';
+import {Store} from '@ngxs/store';
 
 @Component({
   selector: 'app-student-add-modal',
@@ -15,26 +16,21 @@ export class StudentAddModalComponent implements OnInit {
   postForm: FormGroup;
   message = '';
 
-
   constructor(public modal: NgbActiveModal,
-              private studentService: StudentService) { }
+              private store: Store) { }
 
   ngOnInit(): void {
     this.initForm();
   }
 
   submitPost(): void {
-    let newStudent: Student = new Student();
+    let newStudent: IStudent;
     if (this.postForm.valid) {
-      this.message = 'send data to server';
-      newStudent = this.postForm.value as Student;
+      this.message = 'accept data send to server';
+      newStudent = this.postForm.value as IStudent;
       newStudent.hours = 0;
       newStudent.user = new User( null, this.postForm.value.username, this.postForm.value.password);
-      this.studentService.addStudent(newStudent).subscribe(
-        () => { } ,
-        error => { this.message = 'Error ' + JSON.stringify(error.error); },
-        () => this.message = 'Added ' + newStudent.firstName + ' ' + newStudent.lastName
-      );
+      this.store.dispatch(new CreateStudent({ student: newStudent }));
     } else {
       this.message = 'Pleas fill form !';
     }

@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {TeacherService} from '../../../../shared/services/teacher.service';
-import {Teacher} from '../../../../shared/model/Teacher';
+import {ITeacher, Teacher} from '../../../../shared/model/Teacher';
 import {User} from '../../../../shared/model/User';
 
 @Component({
@@ -30,13 +30,13 @@ export class TeacherEditModalComponent implements OnInit {
 
   submitPost(): void {
     let newTeacher: Teacher = new Teacher();
-    let result = '';
+    let result: ITeacher | string;
     if (this.postForm.valid) {
       this.message = 'send data to server';
       newTeacher = this.postForm.value as Teacher;
       newTeacher.id = this.teacherId;
       newTeacher.user = new User( this.userId, this.postForm.value.username, this.postForm.value.password);
-      this.teacherService.patchTeacher(newTeacher, this.teacherId).subscribe(
+      this.teacherService.putTeacher(newTeacher).subscribe(
         data => {
           this.teacherEditedSaved = true;
           result = data;
@@ -50,7 +50,7 @@ export class TeacherEditModalComponent implements OnInit {
   }
 
   private getTeacherThenInitForm(): void {
-    this.teacherService.getTeacher(this.teacherId).subscribe(
+    this.teacherService.getTeacherResponse(this.teacherId).subscribe(
       data => { this.teacher = data as Teacher; },
       error => { this.message = 'Error ' + JSON.stringify(error.error); },
       () => {
