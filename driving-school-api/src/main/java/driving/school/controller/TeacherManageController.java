@@ -2,11 +2,11 @@ package driving.school.controller;
 
 import driving.school.dto.TeacherUserDto;
 import driving.school.mapper.TeacherMapper;
+import driving.school.model.user.Teacher;
 import driving.school.services.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,34 +18,39 @@ public class TeacherManageController {
     private final TeacherMapper teacherMapper;
 
     @GetMapping
-    public ResponseEntity<List<TeacherUserDto>> getAllTeacher() {
-        List<TeacherUserDto> teacherUserDto = teacherService.getAllTeacher().stream()
+    @ResponseStatus(HttpStatus.OK)
+    public List<TeacherUserDto> getTeacher() {
+        return teacherService.getAllTeacher().stream()
                 .map(teacherMapper::map)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok().body(teacherUserDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TeacherUserDto> getTeacher(@PathVariable long id) {
-        return ResponseEntity.ok().body(teacherMapper.map(teacherService.getTeacherById(id)));
+    @ResponseStatus(HttpStatus.OK)
+    public TeacherUserDto getTeacher(@PathVariable long id) {
+        return teacherMapper.map(teacherService.getTeacherById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> patchTeacher(@PathVariable long id,
-                             @RequestBody TeacherUserDto teacherUserDto){
-        teacherService.putTeacherById(id, teacherMapper.map(teacherUserDto));
-        return ResponseEntity.ok().body(null);
+    @ResponseStatus(HttpStatus.OK)
+    public TeacherUserDto patchTeacher(@PathVariable long id,
+                                       @RequestBody TeacherUserDto teacherUserDto){
+        Teacher teacherPuttied = teacherService.putTeacherById(id, teacherMapper.map(teacherUserDto));
+        return teacherMapper.map(teacherPuttied);
     }
 
     @PostMapping
-    public ResponseEntity<Void> postTeacher(@RequestBody TeacherUserDto teacherUserDto) {
-        Long id = teacherService.addTeacher(teacherMapper.map(teacherUserDto));
-        return ResponseEntity.created(URI.create("/api/manage/teacher/"+id)).body(null);
+    @ResponseStatus(HttpStatus.CREATED)
+    public TeacherUserDto postTeacher(@RequestBody TeacherUserDto teacherUserDto) {
+        System.out.println(teacherUserDto);
+        Teacher teacherPosted =  teacherService.addTeacher(teacherMapper.map(teacherUserDto));
+        return teacherMapper.map(teacherPosted);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>  deleteTeacher(@PathVariable long id) {
-        teacherService.deleteTeacherById(id);
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.OK)
+    public TeacherUserDto deleteTeacher(@PathVariable long id) {
+        Teacher teacherDeleted =  teacherService.deleteTeacherById(id);
+        return teacherMapper.map(teacherDeleted);
     }
 }

@@ -27,19 +27,23 @@ public class TeacherService {
                 .orElseThrow(() ->new ResourcesNotFound("Teacher on id '"+ id +"' not exist"));
     }
 
-    public Long addTeacher(Teacher teacher){
-        isUniqueUsername(teacher);
-        teacherRepo.save(teacher);
+    public Teacher addTeacher(Teacher teacher){
+        if(!userService.isUniqueUsername(teacher.getUser().getUsername()))
+            throw new DuplicateUniqueKey("Username '" + teacher.getUser().getUsername() + "' already exist");
         teacher.setUser(getUserWithAuthorityAndPasswordEncode(teacher));
-        return teacher.getId();
+        return teacherRepo.save(teacher);
     }
 
-    public void putTeacherById(Long teacherId, Teacher newTeacher) {
+    public Teacher putTeacherById(Long teacherId, Teacher newTeacher) {
         Teacher oldTeacher = getTeacherById(teacherId);
-        isValidUsername(newTeacher,oldTeacher);
+        if (!oldTeacher.getUser().getUsername().equals(newTeacher.getUser().getUsername())) {
+            if(!userService.isUniqueUsername(newTeacher.getUser().getUsername()))
+                throw new DuplicateUniqueKey("Username '" + newTeacher.getUser().getUsername() + "' already exist");
+        }
+
         newTeacher.setId(teacherId);
         newTeacher.setUser(getUserWithAuthorityAndPasswordEncode(newTeacher));
-        teacherRepo.save(newTeacher);
+        return teacherRepo.save(newTeacher);
     }
 
     private User getUserWithAuthorityAndPasswordEncode(Teacher teacher) {
@@ -49,31 +53,12 @@ public class TeacherService {
         return user;
     }
 
-    public void deleteTeacherById(Long id) {
-        deleteUserByStudentId(id);
-        teacherRepo.deleteById(id);
-    }
-
-    private void deleteUserByStudentId(Long id) {
+    public Teacher deleteTeacherById(Long id) {
         Teacher teacher = teacherRepo.findById(id)
                 .orElseThrow(() -> new ResourcesNotFound("Teacher on Id '" + id + "' not exist"));
         userService.deleteUser(teacher.getUser());
-    }
-
-    //TODO case when oldTeacher username == null
-    private void isValidUsername(Teacher newTeacher, Teacher oldTeacher) {
-        if (newTeacher.getUser() != null){
-            if (!oldTeacher.getUser().getUsername().equals(newTeacher.getUser().getUsername())) {
-                isUniqueUsername(newTeacher);
-            }
-        }
-    }
-
-    private void isUniqueUsername(Teacher teacher) {
-        if (teacher.getUser() != null) {
-            if(!userService.isUniqueUsername(teacher.getUser()))
-                throw new DuplicateUniqueKey("Username '" + teacher.getUser().getUsername() + "' already exist");
-        }
+        teacherRepo.deleteById(id);
+        return teacher;
     }
 
     public Teacher getTeacherByUserId(Long userId) {

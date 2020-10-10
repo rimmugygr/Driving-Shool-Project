@@ -66,7 +66,7 @@ public class ProfileServices {
     public void updateProfile(String username, ProfileRequest profileRequest) {
         User user = userService.getUser(username);
         user.setPassword(encoder.encode(profileRequest.getPassword()));
-        if(!user.getUsername().equals(username) && !userService.isUniqueUsername(user)){
+        if(!user.getUsername().equals(username) && !userService.isUniqueUsername(user.getUsername())){
             throw new DuplicateUniqueKey("Username '" + user.getUsername() + "' already exist");
         } else {
             user.setUsername(profileRequest.getUsername());

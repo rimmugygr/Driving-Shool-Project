@@ -1,5 +1,6 @@
 package driving.school.services;
 
+import driving.school.dto.StudentUserDto;
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.exceptions.ResourcesNotFound;
 import driving.school.model.user.Student;
@@ -94,23 +95,22 @@ class StudentServiceTest {
     @Nested
     class AddStudent{
         @Test
-        void shouldReturnIdOfStudent() {
+        void shouldReturnStudent() {
             //given
-            long studentId = 1;
             Student anyStudent = Student.builder()
                     .firstName("aaa")
                     .build();
             Student resultStudent = Student.builder()
-                    .id(studentId)
+                    .id(1L)
                     .firstName("aaa")
                     .build();
             Mockito.when(studentRepoMock.save(anyStudent))
                     .thenReturn(resultStudent);
             //when
-            Long resultId = studentService.addStudent(anyStudent);
+            Student result = studentService.addStudent(anyStudent);
             //then
             MatcherAssert.assertThat(resultStudent, Matchers.notNullValue());
-            MatcherAssert.assertThat(resultId, Matchers.is(studentId));
+            MatcherAssert.assertThat(resultStudent, Matchers.is(resultStudent));
         }
         @Test
         void shouldAddStudentWithUser() {
@@ -130,7 +130,7 @@ class StudentServiceTest {
                     .build();
             Mockito.when(studentRepoMock.save(anyStudent))
                     .thenReturn(resultStudent);
-            Mockito.when(userServiceMock.isUniqueUsername(anyUser))
+            Mockito.when(userServiceMock.isUniqueUsername(anyUser.getUsername()))
                     .thenReturn(true);
             //when
             studentService.addStudent(anyStudent);
@@ -173,7 +173,7 @@ class StudentServiceTest {
             Exception caughtException = null;
             Mockito.when(studentRepoMock.save(anyStudent))
                     .thenReturn(resultStudent);
-            Mockito.when(userServiceMock.isUniqueUsername(anyUser))
+            Mockito.when(userServiceMock.isUniqueUsername(anyUser.getUsername()))
                     .thenReturn(false);
             //when
             try { studentService.addStudent(anyStudent); }
@@ -222,7 +222,7 @@ class StudentServiceTest {
                     .thenReturn(Optional.of(anyStudentFromDB));
             Mockito.when(studentRepoMock.save(anyStudentInput))
                     .thenReturn(resultStudent);
-            Mockito.when(userServiceMock.isUniqueUsername(anyUser))
+            Mockito.when(userServiceMock.isUniqueUsername(anyUser.getUsername()))
                     .thenReturn(false);
             //when
             try { studentService.putStudentById(studentId,anyStudentInput); }
@@ -250,7 +250,7 @@ class StudentServiceTest {
                     .thenReturn(Optional.empty());
             Mockito.when(studentRepoMock.save(anyStudentInput))
                     .thenReturn(resultStudent);
-            Mockito.when(userServiceMock.isUniqueUsername(anyUser))
+            Mockito.when(userServiceMock.isUniqueUsername(anyUser.getUsername()))
                     .thenReturn(true);
             //when
             try { studentService.putStudentById(studentId,anyStudentInput); }
@@ -284,7 +284,7 @@ class StudentServiceTest {
                     .thenReturn(Optional.of(anyStudentFromDB));
             Mockito.when(studentRepoMock.save(anyStudentInput))
                     .thenReturn(resultStudent);
-            Mockito.when(userServiceMock.isUniqueUsername(anyUser))
+            Mockito.when(userServiceMock.isUniqueUsername(anyUser.getUsername()))
                     .thenReturn(true);
             //when
             studentService.putStudentById(studentId,anyStudentInput);
@@ -316,7 +316,7 @@ class StudentServiceTest {
                     .thenReturn(Optional.of(anyStudentFromDB));
             Mockito.when(studentRepoMock.save(anyStudentInput))
                     .thenReturn(resultStudent);
-            Mockito.when(userServiceMock.isUniqueUsername(anyUserInput))
+            Mockito.when(userServiceMock.isUniqueUsername(anyUserInput.getUsername()))
                     .thenReturn(true);
             //when
             studentService.putStudentById(studentId,anyStudentInput);

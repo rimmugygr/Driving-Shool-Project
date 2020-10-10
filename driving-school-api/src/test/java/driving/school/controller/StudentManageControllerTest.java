@@ -37,6 +37,7 @@ class StudentManageControllerTest {
     long studentId;
     Student anyStudent;
     StudentUserDto anyStudentDto;
+    Student anyStudentWithId;
     String requestStudentJson;
     ResultActions result;
 
@@ -50,33 +51,30 @@ class StudentManageControllerTest {
 
             anyStudent = Student.builder()
                     .address("home")
-                    .firstName("first")
-                    .lastName("last")
-                    .email("a@a.pl")
-                    .hours(0)
-                    .phone("12345")
+                    .status(StudentStatus.Active)
+                    .user(User.builder().username("00000").password("000000").build())
+                    .build();
+
+            anyStudentWithId = Student.builder()
+                    .id(studentId)
+                    .address("home")
                     .status(StudentStatus.Active)
                     .user(User.builder().username("00000").password("000000").build())
                     .build();
 
             anyStudentDto = StudentUserDto.builder()
                     .address("home")
-                    .firstName("first")
-                    .lastName("last")
-                    .email("a@a.pl")
-                    .hours(0)
-                    .phone("12345")
                     .status(StudentStatus.Active)
-                    .user(UserDto.builder().username("00000").build())
+                    .user(UserDto.builder().username("00000").password("000000").build())
                     .build();
 
-            requestStudentJson = mapper.writeValueAsString(anyStudent);
+            requestStudentJson = mapper.writeValueAsString(anyStudentDto);
 
             Mockito.when(studentMapperMock.map(anyStudentDto))
                     .thenReturn(anyStudent);
 
             Mockito.when(studentServiceMock.addStudent(anyStudent))
-                    .thenReturn(1L);
+                    .thenReturn(anyStudentWithId);
             //when
             result = mvc.perform(
                     MockMvcRequestBuilders.post("/api/manage/students")

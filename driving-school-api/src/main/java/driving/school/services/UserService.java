@@ -15,9 +15,8 @@ import java.util.Set;
 public class UserService {
     private final UserRepo userRepository;
 
-    public boolean isUniqueUsername(User user) {
-        User userResult = userRepository.findUserByUsername(user.getUsername());
-        return userResult == null;
+    public boolean isUniqueUsername(String username) {
+        return !userRepository.existsByUsername(username);
     }
 
     public void deleteUser(User user) {

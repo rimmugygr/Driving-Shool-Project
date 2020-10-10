@@ -2,11 +2,12 @@ package driving.school.controller;
 
 import driving.school.dto.StudentUserDto;
 import driving.school.mapper.StudentMapper;
+import driving.school.model.user.Student;
 import driving.school.services.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,34 +19,38 @@ public class StudentManageController {
     private final StudentMapper studentMapper;
 
     @GetMapping
-    public ResponseEntity<List<StudentUserDto>> getAllStudent() {
-        List<StudentUserDto> studentUserDto = studentService.getAllStudent().stream()
+    @ResponseStatus(HttpStatus.OK)
+    public List<StudentUserDto> getAllStudent() {
+        return studentService.getAllStudent().stream()
                 .map(studentMapper::map)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok().body(studentUserDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentUserDto> getStudent(@PathVariable long id) {
-        return ResponseEntity.ok().body(studentMapper.map(studentService.getStudentById(id)));
+    @ResponseStatus(HttpStatus.OK)
+    public StudentUserDto getStudent(@PathVariable long id) {
+        return studentMapper.map(studentService.getStudentById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> patchStudent(@PathVariable long id,
+    @ResponseStatus(HttpStatus.OK)
+    public StudentUserDto patchStudent(@PathVariable long id,
                              @RequestBody StudentUserDto studentUserDto) {
-        studentService.putStudentById(id, studentMapper.map(studentUserDto));
-        return ResponseEntity.ok().build();
+        Student studentPuttied = studentService.putStudentById(id, studentMapper.map(studentUserDto));
+        return studentMapper.map(studentPuttied);
     }
 
     @PostMapping()
-    public ResponseEntity<Void> postStudent(@RequestBody StudentUserDto studentUserDto) {
-        Long id = studentService.addStudent(studentMapper.map(studentUserDto));
-        return ResponseEntity.created(URI.create("api/manage/students/"+ id)).build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public StudentUserDto postStudent(@RequestBody StudentUserDto studentUserDto) {
+        Student studentAdded = studentService.addStudent(studentMapper.map(studentUserDto));
+        return studentMapper.map(studentAdded);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> deleteStudent(@PathVariable long id) {
         studentService.deleteStudentById(id);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().build();
     }
 }

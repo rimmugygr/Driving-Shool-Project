@@ -29,18 +29,18 @@ public class StudentService {
                 .orElseThrow(() ->new ResourcesNotFound("Student on Id '"+ id +"' not exist"));
     }
 
-    public Long addStudent(Student student)  {
+    public Student addStudent(Student student)  {
         isUniqueUsername(student);
         student.setUser(getUserWithAuthorityAndPasswordEncode(student));
-        return  studentRepo.save(student).getId();
+        return  studentRepo.save(student);
     }
 
-    public void putStudentById(long id, Student newStudent) {
+    public Student putStudentById(long id, Student newStudent) {
         Student oldStudent = getStudentById(id);
         isValidUsername(newStudent, oldStudent);
         newStudent.setId(id);
         newStudent.setUser(getUserWithAuthorityAndPasswordEncode(newStudent));
-        studentRepo.save(newStudent);
+        return studentRepo.save(newStudent);
     }
 
     private User getUserWithAuthorityAndPasswordEncode(Student student) {
@@ -81,7 +81,7 @@ public class StudentService {
 
     private void isUniqueUsername(Student student) {
         if (student.getUser() != null) {
-            if(!userService.isUniqueUsername(student.getUser()))
+            if(!userService.isUniqueUsername(student.getUser().getUsername()))
                 throw new DuplicateUniqueKey("Username '" + student.getUser().getUsername() + "' already exist");
         }
     }
