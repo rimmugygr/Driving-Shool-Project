@@ -31,34 +31,35 @@ public class StudentService {
 
     public Student addStudent(Student student)  {
         isUniqueUsername(student);
-        student.setUser(getUserWithAuthorityAndPasswordEncode(student));
+        User user = student.getUser();
+        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
+        user.setPassword(encoder.encode(student.getUser().getPassword()));
+        student.setUser(user);
         return  studentRepo.save(student);
     }
 
     public Student putStudentById(long id, Student newStudent) {
         Student oldStudent = getStudentById(id);
         isValidUsername(newStudent, oldStudent);
+        User user = newStudent.getUser();
+        if (newStudent.getUser().getPassword().isEmpty()) {            // if no password then not change
+            user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
+            user.setPassword(oldStudent.getUser().getPassword());
+        } else {            // if password then encode
+            user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
+            user.setPassword(encoder.encode(newStudent.getUser().getPassword()));
+        }
         newStudent.setId(id);
-        newStudent.setUser(getUserWithAuthorityAndPasswordEncode(newStudent));
+        newStudent.setUser(user);
         return studentRepo.save(newStudent);
     }
 
-    private User getUserWithAuthorityAndPasswordEncode(Student student) {
-        User user = student.getUser();
-        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
-        user.setPassword(encoder.encode(student.getUser().getPassword()));
-        return user;
-    }
-
-    public void deleteStudentById(long id) {
-        deleteUserByStudentId(id);
-        studentRepo.deleteById(id);
-    }
-
-    private void deleteUserByStudentId(long id) {
+    public Student deleteStudentById(long id) {
         Student student = studentRepo.findById(id)
                 .orElseThrow(() -> new ResourcesNotFound("Student on Id '" + id + "' not exist"));
         userService.deleteUser(student.getUser());
+        studentRepo.deleteById(id);
+        return student;
     }
 
     private void isValidUsername(Student newStudent, Student oldStudent) {

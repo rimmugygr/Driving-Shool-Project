@@ -1,0 +1,82 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="isCreateMode()">Add Teacher</h4>
+    <h4 class="modal-title" *ngIf="isEditMode()">Update teacher</h4>
+    <h4 class="modal-title" *ngIf="isDeleteMode()">Delete teacher</h4>
+    <h4 class="modal-title" *ngIf="isDetailsMode()">View teacher</h4>
+    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="outline">
+          <mat-label>FirstName</mat-label>
+          <input matInput formControlName="firstName" required>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="outline">
+          <mat-label>LastName</mat-label>
+          <input matInput formControlName="lastName" required>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div formGroupName="user">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="outline">
+            <mat-label>Login</mat-label>
+            <input matInput formControlName="username" required>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" >
+      <div class="col">
+        <mat-form-field appearance="outline">
+          <mat-label>CreateDate</mat-label>
+          <input matInput formControlName="createDate" >
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="outline">
+          <mat-label>UpdateDate</mat-label>
+          <input matInput formControlName="updateDate" >
+        </mat-form-field>
+      </div>
+    </div>
+    <div *ngIf="isDeleteMode()">
+      <p><strong>Are you sure you want to delete profile?</strong></p>
+      <p>All information associated to this user profile will be permanently deleted.
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+
+
+
+
+  </div>
+  <div class="modal-footer">
+    <div>{{message}}</div>
+    <br>
+    <button mat-raised-button type="button" class="btn btn-primary m-2" (click)="modal.dismiss('cancel click')">Close</button>
+    <button mat-raised-button type="reset" class="btn btn-primary m-2"  *ngIf="isCreateMode()">Clear</button>
+    <button mat-raised-button type="submit" class="btn btn-primary m-2" *ngIf="isCreateMode()">Add new teacher</button>
+    <button mat-raised-button type="submit" class="btn btn-primary m-2" *ngIf="isEditMode()">Update teacher</button>
+    <button mat-raised-button type="submit" class="btn btn-primary m-2" *ngIf="isDeleteMode()">Delete teacher</button>
+  </div>
+
+</form>
+

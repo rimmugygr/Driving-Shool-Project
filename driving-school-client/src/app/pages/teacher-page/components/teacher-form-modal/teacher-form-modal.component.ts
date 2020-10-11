@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {ITeacher, Teacher} from '../../model/Teacher';
-import {FORM_PAGE_MODE} from '../../model/FormPageMode';
+import {ITeacher} from '../../../../shared/model/Teacher';
+import {FORM_PAGE_MODE} from '../../../../shared/model/FormPageMode';
 import {Store} from '@ngxs/store';
-import {CreateTeacher, UpdateTeacher} from '../../state/teacher-list/teacher-list.actions';
-import {TeacherListState} from '../../state/teacher-list/teacher-list.state';
+import {CreateTeacher, DeleteTeacher, UpdateTeacher} from '../../../../shared/state/teacher-list/teacher-list.actions';
+import {TeacherListState} from '../../../../shared/state/teacher-list/teacher-list.state';
 
 @Component({
   selector: 'app-teacher-form-modal',
@@ -16,7 +16,7 @@ export class TeacherFormModalComponent implements OnInit {
   @Input() pageMode: FORM_PAGE_MODE;
   @Input() teacherId;
   @Input() userId;
-  teacher: Teacher;
+  teacher: ITeacher;
   hide = true;
   form: FormGroup;
   message = '';
@@ -29,6 +29,9 @@ export class TeacherFormModalComponent implements OnInit {
   }
 
   submitForm(): void {
+    if (this.isDeleteMode()) {
+      this.store.dispatch(new DeleteTeacher({teacher: this.form.getRawValue()}));
+    }
     if (this.form.valid) {
       if (this.isCreateMode()) {
         this.store.dispatch(new CreateTeacher({teacher: this.form.value}));

@@ -30,7 +30,10 @@ public class TeacherService {
     public Teacher addTeacher(Teacher teacher){
         if(!userService.isUniqueUsername(teacher.getUser().getUsername()))
             throw new DuplicateUniqueKey("Username '" + teacher.getUser().getUsername() + "' already exist");
-        teacher.setUser(getUserWithAuthorityAndPasswordEncode(teacher));
+        User user = teacher.getUser();
+        user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
+        user.setPassword(encoder.encode(teacher.getUser().getPassword()));
+        teacher.setUser(user);
         return teacherRepo.save(teacher);
     }
 
@@ -40,17 +43,18 @@ public class TeacherService {
             if(!userService.isUniqueUsername(newTeacher.getUser().getUsername()))
                 throw new DuplicateUniqueKey("Username '" + newTeacher.getUser().getUsername() + "' already exist");
         }
-
+        User user = newTeacher.getUser();
+        // if no password ten not change
+        if(newTeacher.getUser().getPassword().isEmpty()) {
+            user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
+            user.setPassword(oldTeacher.getUser().getPassword());
+        } else {
+            user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
+            user.setPassword(encoder.encode(newTeacher.getUser().getPassword()));
+        }
         newTeacher.setId(teacherId);
-        newTeacher.setUser(getUserWithAuthorityAndPasswordEncode(newTeacher));
+        newTeacher.setUser(user);
         return teacherRepo.save(newTeacher);
-    }
-
-    private User getUserWithAuthorityAndPasswordEncode(Teacher teacher) {
-        User user = teacher.getUser();
-        user.setRoles(Set.of(Authority.builder().name(Role.STUDENT).build()));
-        user.setPassword(encoder.encode(teacher.getUser().getPassword()));
-        return user;
     }
 
     public Teacher deleteTeacherById(Long id) {
