@@ -32,6 +32,11 @@ import {Observable} from 'rxjs';
           <mat-icon>work</mat-icon>
           <span>Available Date</span></a>
       </mat-list-item>
+      <mat-list-item *ngIf="isAuthenticated$ | async">
+        <a routerLink="/profile" class="list-group-item list-group-item-action bg-light">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span></a>
+      </mat-list-item>
       <mat-list-item *ngIf="isShowTeacherBoard$ | async">
         <a routerLink="tech" class="list-group-item list-group-item-action bg-light">
           <mat-icon>work</mat-icon>
@@ -53,14 +58,17 @@ import {Observable} from 'rxjs';
 })
 export class SidebarComponent implements OnInit{
 
+  @Select(UserAuthState.isAuthenticated)
+  isAuthenticated$: Observable<boolean>;
+
   @Select(UserAuthState.isShowAdminBoard)
-  isShowAdminBoard$: Observable<string>;
+  isShowAdminBoard$: Observable<boolean>;
 
   @Select(UserAuthState.isShowStudentBoard)
-  isShowStudentBoard$: Observable<string>;
+  isShowStudentBoard$: Observable<boolean>;
 
   @Select(UserAuthState.isShowTeacherBoard)
-  isShowTeacherBoard$: Observable<string>;
+  isShowTeacherBoard$: Observable<boolean>;
 
   constructor() {
   }

@@ -1,5 +1,5 @@
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import {CreateStudent, FetchStudents} from './students-list.actions';
+import {CreateStudent, DeleteStudent, FetchStudents, UpdateStudent} from './students-list.actions';
 import {tap} from 'rxjs/operators';
 import {StudentService} from '../../services/student.service';
 import {IStudent} from '../../model/Student';
@@ -24,6 +24,13 @@ export class StudentsListState {
     return state.students;
   }
 
+  @Selector()
+  public static getStudentById(state: StudentsListStateModel): (id: string) => IStudent {
+    return (id: string): IStudent => {
+      return state.students.find(student => student.id === id);
+    };
+  }
+
   constructor(private studentService: StudentService) {
   }
 
@@ -41,6 +48,26 @@ export class StudentsListState {
     return this.studentService.postStudent(action.payload.student).pipe(
       tap(data => {
         const students = [... ctx.getState().students, data];
+        ctx.patchState({students});
+      }),
+    );
+  }
+
+  @Action(UpdateStudent)
+  public updateTeacher(ctx: StateContext<StudentsListStateModel>, action: UpdateStudent): any {
+    return this.studentService.patchStudent(action.payload.student).pipe(
+      tap(data => {
+        const students = ctx.getState().students.map(x =>  x.id === data.id ? data : x);
+        ctx.patchState({students});
+      }),
+    );
+  }
+
+  @Action(DeleteStudent)
+  public deleteTeacher(ctx: StateContext<StudentsListStateModel>, action: DeleteStudent): any {
+    return this.studentService.deleteStudent(action.payload.student).pipe(
+      tap(data => {
+        const students = ctx.getState().students.filter(x =>  x.id !== data.id);
         ctx.patchState({students});
       }),
     );

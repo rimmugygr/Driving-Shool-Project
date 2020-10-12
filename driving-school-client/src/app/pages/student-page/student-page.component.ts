@@ -2,16 +2,15 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {StudentEditModalComponent} from './components/student-edit-modal/student-edit-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {StudentAddModalComponent} from './components/student-add-modal/student-add-modal.component';
 import {IStudent} from '../../shared/model/Student';
-import {StudentDeleteModalComponent} from './components/student-delete-modal/student-delete-modal.component';
 import {Select, Store} from '@ngxs/store';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
 import {StudentsListState} from '../../shared/state/students-list/students-list.state';
 import {debounceTime, map} from 'rxjs/operators';
 import {FetchStudents} from '../../shared/state/students-list/students-list.actions';
+import {StudentFormModalComponent} from './components/student-form-modal/student-form-modal.component';
+import {FORM_PAGE_MODE} from '../../shared/model/FormPageMode';
 
 @Component({
   selector: 'app-student-list',
@@ -81,17 +80,20 @@ export class StudentPageComponent implements AfterViewInit, OnInit{
   }
 
   openEditStudentModal(studentId: number, userId: number): void {
-    const modalRef = this.modalService.open(StudentEditModalComponent);
+    const modalRef = this.modalService.open(StudentFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.EDIT;
     modalRef.componentInstance.studentId = studentId;
     modalRef.componentInstance.userId = userId;
   }
 
   openAddStudentModal(): void {
-    this.modalService.open(StudentAddModalComponent);
+    const modalRef = this.modalService.open(StudentFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.CREATE;
   }
 
   openDeleteStudentModal(studentId: number, userId: number): void  {
-    const modalRef = this.modalService.open(StudentDeleteModalComponent);
+    const modalRef = this.modalService.open(StudentFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DELETE;
     modalRef.componentInstance.studentId = studentId;
     modalRef.componentInstance.userId = userId;
   }
@@ -106,7 +108,8 @@ export class StudentPageComponent implements AfterViewInit, OnInit{
   }
 
   openViewTeacherModal(studentId: number, userId: number): void {
-    const modalRef = this.modalService.open(StudentEditModalComponent);
+    const modalRef = this.modalService.open(StudentFormModalComponent);
+    modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DETAILS;
     modalRef.componentInstance.studentId = studentId;
     modalRef.componentInstance.userId = userId;
   }

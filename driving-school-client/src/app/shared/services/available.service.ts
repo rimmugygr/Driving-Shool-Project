@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AvailableDate} from '../model/AvailableDate';
+import {AvailableDate, IAvailableDate} from '../model/AvailableDate';
 
 const AVAILABLE_API = '/server/api/teachers/available';
 const AVAILABLE_API_WITH_TEACHER_ID = `/server/api/teachers/{teacherId}/available`;
@@ -16,8 +16,8 @@ export class AvailableService {
 
   constructor(private http: HttpClient) { }
 
-  getAllAvailableDate(): Observable<any> {
-    return this.http.get(AVAILABLE_API);
+  getAllAvailableDate(): Observable<IAvailableDate[]> {
+    return this.http.get<IAvailableDate[]>(AVAILABLE_API);
   }
 
   getAllAvailableDateByTeacherId(teacherId: number): Observable<any> {

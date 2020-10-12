@@ -18,14 +18,17 @@ import {ToastrModule} from 'ngx-toastr';
 import {messageHandlerProviders} from './shared/handlers/message.handler';
 import {StudentsListState} from './shared/state/students-list/students-list.state';
 import {TeacherListState} from './shared/state/teacher-list/teacher-list.state';
+import {AvailableDateListState} from './shared/state/available-date-list/available-date-list.state';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
-const persistentStates: StateClass<any>[] = [UserAuthState, StudentsListState, TeacherListState];
-const states: StateClass<any>[] = [...persistentStates];
+const persistentStates: StateClass<any>[] = [UserAuthState];
+const states: StateClass<any>[] = [...persistentStates, StudentsListState, TeacherListState, AvailableDateListState];
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundPageComponent,
+    NotFoundPageComponent
   ],
   imports: [
     AppRoutingModule,
@@ -36,7 +39,7 @@ const states: StateClass<any>[] = [...persistentStates];
     ToastrModule.forRoot(),
     NgxsModule.forRoot(states, {developmentMode: !environment.production}),
     NgxsStoragePluginModule.forRoot({ key: persistentStates, storage: StorageOption.LocalStorage}),
-    NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production})
+    NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
   ],
   providers: [
     authInterceptorProviders,

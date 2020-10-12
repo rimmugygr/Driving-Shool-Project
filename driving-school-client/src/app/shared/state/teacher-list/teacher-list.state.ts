@@ -1,5 +1,5 @@
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import {CreateTeacher, FetchTeachers, UpdateTeacher} from './teacher-list.actions';
+import {CreateTeacher, DeleteTeacher, FetchTeachers, UpdateTeacher} from './teacher-list.actions';
 import {ITeacher} from '../../model/Teacher';
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class TeacherListState {
   @Selector()
   public static getTeacherById(state: TeacherListStateModel): (id: string) => ITeacher {
     return (id: string): ITeacher => {
-      return state.teachers.find(employee => employee.id === id);
+      return state.teachers.find(teacher => teacher.id === id);
     };
   }
 
@@ -44,7 +44,6 @@ export class TeacherListState {
 
   @Action(CreateTeacher)
   public createTeacher(ctx: StateContext<TeacherListStateModel>, action: CreateTeacher): any {
-    console.log(JSON.stringify(action.payload.teacher));
     return this.teacherService.postTeacher(action.payload.teacher).pipe(
       tap(data => {
         const teachers = [... ctx.getState().teachers, data];
@@ -57,7 +56,17 @@ export class TeacherListState {
   public updateTeacher(ctx: StateContext<TeacherListStateModel>, action: UpdateTeacher): any {
     return this.teacherService.putTeacher(action.payload.teacher).pipe(
       tap(data => {
-        const teachers = [... ctx.getState().teachers, data];
+        const teachers = ctx.getState().teachers.map(x =>  x.id === data.id ? data : x);
+        ctx.patchState({teachers});
+      }),
+    );
+  }
+
+  @Action(DeleteTeacher)
+  public deleteTeacher(ctx: StateContext<TeacherListStateModel>, action: DeleteTeacher): any {
+    return this.teacherService.deleteTeacher(action.payload.teacher).pipe(
+      tap(data => {
+        const teachers = ctx.getState().teachers.filter(x =>  x.id !== data.id);
         ctx.patchState({teachers});
       }),
     );

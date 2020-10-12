@@ -1,8 +1,9 @@
 import {APP_INITIALIZER, Injectable, Injector} from '@angular/core';
-import {Actions, ofActionCanceled, ofActionCompleted, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
+import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {Login, Logout} from '../state/user-auth/user-auth.actions';
 import {MessageService} from '../services/message.service';
-import {UserAuthState} from '../state/user-auth/user-auth.state';
+import {CreateStudent, DeleteStudent, UpdateStudent} from '../state/students-list/students-list.actions';
+import {CreateTeacher, DeleteTeacher, UpdateTeacher} from '../state/teacher-list/teacher-list.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,17 @@ export class MessageHandler {
   ) {
 
     this.actions$
-      .pipe(ofActionCompleted(Login))
+      .pipe(ofActionSuccessful(Login))
       .subscribe(result => {
         const message = this.injector.get(MessageService);
-        const username = store.selectSnapshot(UserAuthState.username);
-        if (username != null) {
-          message.showSuccess('Successful login as ' + username, 'Login');
-        } else {
-          message.showErrors('Error on login', 'Login');
-        }
+        message.showSuccess('Successful login as ' + result.payload.loginRequest.username, 'Login');
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(Login))
+      .subscribe(result => {
+        const message = this.injector.get(MessageService);
+        message.showErrors('Error on login as' + result.payload.loginRequest.username , 'Login');
       });
 
     this.actions$
@@ -39,6 +42,34 @@ export class MessageHandler {
       .subscribe(result => {
         const message = this.injector.get(MessageService);
         message.showErrors('Error on logout', 'Logout');
+      });
+
+    this.actions$
+      .pipe(ofActionSuccessful(CreateStudent, UpdateStudent, DeleteStudent))
+      .subscribe(result => {
+        const message = this.injector.get(MessageService);
+        message.showSuccess('Successful action on student', 'Student');
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(CreateStudent, UpdateStudent, DeleteStudent))
+      .subscribe(result => {
+        const message = this.injector.get(MessageService);
+        message.showErrors('Error in action on student', 'Student');
+      });
+
+    this.actions$
+      .pipe(ofActionSuccessful(CreateTeacher, UpdateTeacher, DeleteTeacher))
+      .subscribe(result => {
+        const message = this.injector.get(MessageService);
+        message.showSuccess('Successful action on teacher', 'Teacher');
+      });
+
+    this.actions$
+      .pipe(ofActionErrored(CreateTeacher, UpdateTeacher, DeleteTeacher))
+      .subscribe(result => {
+        const message = this.injector.get(MessageService);
+        message.showErrors('Error in action on teacher', 'Teacher');
       });
   }
 }

@@ -1,9 +1,16 @@
-export class  AvailableDate {
-  public id: number;
-  public date: string;
-  public teacherId: number;
-  public reserved: boolean;
-  public teacherFirstName: string;
-  public teacherLastName: string;
-
+export class  AvailableDate implements IAvailableDate{
+  id: string;
+  date: string;
+  teacherId: string;
+  reserved: boolean;
+  teacherFirstName: string;
+  teacherLastName: string;
+}
+export interface IAvailableDate {
+  id: string;
+  date: string;
+  teacherId: string;
+  reserved: boolean;
+  teacherFirstName: string;
+  teacherLastName: string;
 }

@@ -31,7 +31,7 @@ export class TeacherService {
     return this.http.put<ITeacher>(TEACHER_API + '/' + teacher.id, JSON.stringify(teacher), httpHeaders);
   }
 
-  deleteTeacher(teacherId: number): Observable<ITeacher>  {
-    return this.http.delete<ITeacher>(TEACHER_API + '/' + teacherId);
+  deleteTeacher(teacher: ITeacher): Observable<ITeacher>  {
+    return this.http.delete<ITeacher>(TEACHER_API + '/' + teacher.id);
   }
 }

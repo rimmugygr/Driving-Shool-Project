@@ -27,10 +27,10 @@ export class StudentService {
     return this.http.post<IStudent>(STUDENT_API, JSON.stringify(student), httpHeaders);
   }
 
-  patchStudent(student: IStudent, studentId: number): Observable<IStudent>  {
-    return this.http.put<IStudent>(STUDENT_API + '/' + studentId, JSON.stringify(student), httpHeaders);
+  patchStudent(student: IStudent): Observable<IStudent>  {
+    return this.http.put<IStudent>(STUDENT_API + '/' + student.id, JSON.stringify(student), httpHeaders);
   }
-  deleteStudent(studentId: number): Observable<IStudent>  {
-    return this.http.delete<IStudent>(STUDENT_API + '/' + studentId);
+  deleteStudent(student: IStudent): Observable<IStudent>  {
+    return this.http.delete<IStudent>(STUDENT_API + '/' + student.id);
   }
 }

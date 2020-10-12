@@ -26,9 +26,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {RouterModule} from '@angular/router';
-import { TeacherFormModalComponent } from './components/teacher-form-modal/teacher-form-modal.component';
-
-
+import {CalendarModule, DateAdapter} from 'angular-calendar';
+import { CalendarHeaderComponent } from '../pages/available-date-page/calendar-header/calendar-header.component';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,6 @@ import { TeacherFormModalComponent } from './components/teacher-form-modal/teach
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
-    TeacherFormModalComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +61,8 @@ import { TeacherFormModalComponent } from './components/teacher-form-modal/teach
     FormsModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    RouterModule
+    RouterModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
   exports: [
     LoginModalComponent,
@@ -92,7 +92,8 @@ import { TeacherFormModalComponent } from './components/teacher-form-modal/teach
     FormsModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    RouterModule
+    RouterModule,
+    CalendarModule,
   ]
 })
 export class SharedModule { }
