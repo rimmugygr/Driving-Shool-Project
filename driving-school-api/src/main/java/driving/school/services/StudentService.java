@@ -1,7 +1,9 @@
 package driving.school.services;
 
+import driving.school.dto.StudentUserDto;
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.exceptions.ResourcesNotFound;
+import driving.school.mapper.StudentMapper;
 import driving.school.model.user.Authority;
 import driving.school.model.user.Role;
 import driving.school.model.user.Student;
@@ -19,6 +21,7 @@ public class StudentService {
     private final StudentRepo studentRepo;
     private final UserService userService;
     private final PasswordEncoder encoder;
+    private final StudentMapper studentMapper;
 
     public List<Student> getAllStudent() {
         return studentRepo.findAll();
@@ -54,12 +57,13 @@ public class StudentService {
         return studentRepo.save(newStudent);
     }
 
-    public Student deleteStudentById(long id) {
+    public StudentUserDto deleteStudentById(long id) {
         Student student = studentRepo.findById(id)
                 .orElseThrow(() -> new ResourcesNotFound("Student on Id '" + id + "' not exist"));
+        StudentUserDto studentDto = studentMapper.map(student);
         userService.deleteUser(student.getUser());
         studentRepo.deleteById(id);
-        return student;
+        return studentDto;
     }
 
     private void isValidUsername(Student newStudent, Student oldStudent) {

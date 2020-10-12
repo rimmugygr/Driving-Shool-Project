@@ -6,7 +6,6 @@ import driving.school.model.user.Student;
 import driving.school.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +49,6 @@ public class StudentManageController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public StudentUserDto deleteStudent(@PathVariable long id) {
-        Student studentDeleted = studentService.deleteStudentById(id);
-        return studentMapper.map(studentDeleted);
+        return studentService.deleteStudentById(id);
     }
 }

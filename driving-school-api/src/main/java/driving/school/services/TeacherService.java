@@ -1,8 +1,10 @@
 package driving.school.services;
 
 
+import driving.school.dto.TeacherUserDto;
 import driving.school.exceptions.DuplicateUniqueKey;
 import driving.school.exceptions.ResourcesNotFound;
+import driving.school.mapper.TeacherMapper;
 import driving.school.model.user.*;
 import driving.school.repository.TeacherRepo;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ public class TeacherService {
     private final TeacherRepo teacherRepo;
     private final UserService userService;
     private final PasswordEncoder encoder;
+    private final TeacherMapper teacherMapper;
 
     public List<Teacher> getAllTeacher() {
         return teacherRepo.findAll();
@@ -57,12 +60,13 @@ public class TeacherService {
         return teacherRepo.save(newTeacher);
     }
 
-    public Teacher deleteTeacherById(Long id) {
+    public TeacherUserDto deleteTeacherById(Long id) {
         Teacher teacher = teacherRepo.findById(id)
                 .orElseThrow(() -> new ResourcesNotFound("Teacher on Id '" + id + "' not exist"));
+        TeacherUserDto teacherDto = teacherMapper.map(teacher);
         userService.deleteUser(teacher.getUser());
         teacherRepo.deleteById(id);
-        return teacher;
+        return teacherDto;
     }
 
     public Teacher getTeacherByUserId(Long userId) {

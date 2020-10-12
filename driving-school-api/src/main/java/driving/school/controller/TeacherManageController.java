@@ -50,7 +50,6 @@ public class TeacherManageController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TeacherUserDto deleteTeacher(@PathVariable long id) {
-        Teacher teacherDeleted =  teacherService.deleteTeacherById(id);
-        return teacherMapper.map(teacherDeleted);
+        return teacherService.deleteTeacherById(id);
     }
 }
