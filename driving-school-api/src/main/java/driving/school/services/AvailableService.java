@@ -1,6 +1,7 @@
 package driving.school.services;
 
-
+import driving.school.dto.AvailableDateDto;
+import driving.school.mapper.AvailableMapper;
 import driving.school.model.AvailableDate;
 import driving.school.repository.AvailableDateRepo;
 import lombok.AllArgsConstructor;
@@ -9,39 +10,63 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
 public class AvailableService {
-    AvailableDateRepo availableDateRepo;
+    private final AvailableDateRepo availableDateRepo;
+    private final AvailableMapper availableMapper;
 
-    public long addAvailableDate(AvailableDate availableDate) {
-        availableDateRepo.save(availableDate);
-        return availableDate.getId();
+    public AvailableDateDto addAvailableDate(AvailableDateDto availableDateDto) {
+        AvailableDate availableDate = availableDateRepo.save(availableMapper.map(availableDateDto));
+        return availableMapper.map(availableDate);
     }
 
-    public void addAvailableDate(List<AvailableDate> availableDate) {
+    public List<AvailableDateDto> addAvailableDate(List<AvailableDateDto> availableDateDtos) {
+        List<AvailableDate> availableDate = availableDateDtos.stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
         availableDateRepo.saveAll(availableDate);
+        return availableDate.stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public void deleteAvailableDateByTeacher(long availableId) {
+    public AvailableDateDto deleteAvailableDateByTeacher(long availableId) {
+        AvailableDate availableDate = availableDateRepo.getOne(availableId);
         availableDateRepo.deleteById(availableId);
+        return availableMapper.map(availableDate);
     }
 
-    public void deleteAvailableDateByTeacher(List<Long> availableId) {
-        availableId.forEach(x-> availableDateRepo.deleteById(x));
+    public List<AvailableDateDto> deleteAvailableDateByTeacher(List<Long> availableId) {
+        List<AvailableDate> availableDates = availableId.stream()
+                .map(availableDateRepo::getOne)
+                .collect(Collectors.toList());
+        availableId.forEach(availableDateRepo::deleteById);
+        return availableDates.stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public void deleteAllAvailableDateByTeacherId(long teacherId) {
+    public List<AvailableDateDto> deleteAllAvailableDateByTeacherId(long teacherId) {
+        List<AvailableDate> availableDates = availableDateRepo.findAllByTeacherId(teacherId);
         availableDateRepo.deleteAvailableDatesByTeacherId(teacherId);
+        return availableDates.stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public List<AvailableDate> getAllAvailableDateByTeacher(long teacherId) {
-        return availableDateRepo.findAllByTeacherIdAndReservedIsFalse(teacherId);
+    public List<AvailableDateDto> getAllAvailableDateByTeacher(long teacherId) {
+        return availableDateRepo.findAllByTeacherIdAndReservedIsFalse(teacherId).stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public List<AvailableDate> getAllAvailableDate() {
-        return availableDateRepo.findAllByReservedIsFalse();
+    public List<AvailableDateDto> getAllAvailableDate() {
+        return availableDateRepo.findAllByReservedIsFalse().stream()
+                .map(availableMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Transactional

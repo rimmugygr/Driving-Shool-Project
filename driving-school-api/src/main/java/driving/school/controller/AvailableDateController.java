@@ -2,75 +2,58 @@ package driving.school.controller;
 
 
 import driving.school.dto.AvailableDateDto;
-import driving.school.mapper.AvailableMapper;
-import driving.school.model.AvailableDate;
 import driving.school.services.AvailableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/teachers")
 public class AvailableDateController {
     private final AvailableService availableService;
-    private final AvailableMapper availableMapper;
 
     @GetMapping("/{teacherId}/available")
-    public ResponseEntity<List<AvailableDateDto>> getAvailableRideByTeacher(@PathVariable long teacherId) {
-        List<AvailableDateDto> availableDateDto = availableService.getAllAvailableDateByTeacher(teacherId).stream()
-                .map(availableMapper::map)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(availableDateDto);
+    @ResponseStatus(HttpStatus.OK)
+    public List<AvailableDateDto> getAvailableRideByTeacher(@PathVariable long teacherId) {
+        return availableService.getAllAvailableDateByTeacher(teacherId);
     }
 
     @GetMapping("/available")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<AvailableDateDto>> getAllAvailableRide() {
-        List<AvailableDateDto> availableDateDto = availableService.getAllAvailableDate().stream()
-                .map(availableMapper::map)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(availableDateDto);
+    public List<AvailableDateDto> getAllAvailableRide() {
+        return availableService.getAllAvailableDate();
     }
 
     @PostMapping("/available")
-    public ResponseEntity<Void> postAvailableRideByTeacher(@RequestBody AvailableDateDto availableDateDto) {
-        long id = availableService.addAvailableDate(availableMapper.map(availableDateDto));
-        return ResponseEntity.created(URI.create("/api/teachers/available")).build();
+    @ResponseStatus(HttpStatus.OK)
+    public AvailableDateDto postAvailableRideByTeacher(@RequestBody AvailableDateDto availableDateDto) {
+        return availableService.addAvailableDate(availableDateDto);
     }
 
     @PostMapping("/available/list")
-    public ResponseEntity<Void> postAvailableRidesByTeacher(
-                                  @RequestBody List<AvailableDateDto> availableDateDto) throws SQLIntegrityConstraintViolationException {
-        List<AvailableDate> availableDate = availableDateDto.stream()
-                .map(availableMapper::map)
-                .collect(Collectors.toList());
-        availableService.addAvailableDate(availableDate);
-        return ResponseEntity.created(URI.create("")).body(null);
+    @ResponseStatus(HttpStatus.OK)
+    public List<AvailableDateDto> postAvailableRidesByTeacher(@RequestBody List<AvailableDateDto> availableDateDto)
+            throws SQLIntegrityConstraintViolationException {
+        return availableService.addAvailableDate(availableDateDto);
     }
 
     @DeleteMapping("/available/{availableId}")
-    public ResponseEntity<Void> deleteAvailableRideByTeacher(@PathVariable long availableId) {
-        availableService.deleteAvailableDateByTeacher(availableId);
-        return ResponseEntity.notFound().build();
+    public AvailableDateDto deleteAvailableRideByTeacher(@PathVariable long availableId) {
+        return availableService.deleteAvailableDateByTeacher(availableId);
     }
 
     @DeleteMapping("/available/list")
-    public ResponseEntity<Void> deleteAvailableRideByTeacher(@RequestBody List<Long> availableIdList) {
-        availableService.deleteAvailableDateByTeacher(availableIdList);
-        return ResponseEntity.notFound().build();
+    public List<AvailableDateDto> deleteAvailableRideByTeacher(@RequestBody List<Long> availableIdList) {
+        return availableService.deleteAvailableDateByTeacher(availableIdList);
     }
 
     @DeleteMapping("/{teacherId}/available")
-    public ResponseEntity<Void> deleteAllAvailableRideByTeacherId( @PathVariable long teacherId) {
-        availableService.deleteAllAvailableDateByTeacherId(teacherId);
-        return ResponseEntity.notFound().build();
+    public List<AvailableDateDto> deleteAllAvailableRideByTeacherId( @PathVariable long teacherId) {
+        return availableService.deleteAllAvailableDateByTeacherId(teacherId);
     }
 }
 
