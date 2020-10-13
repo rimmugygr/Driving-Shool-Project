@@ -6,20 +6,20 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {IStudent} from '../../shared/model/Student';
 import {Select, Store} from '@ngxs/store';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
-import {StudentsListState} from '../../shared/state/students-list/students-list.state';
+import {ProfilesStudentsListState} from '../../shared/state/profiles-students-list/profiles-students-list-state.service';
 import {debounceTime, map} from 'rxjs/operators';
-import {FetchStudents} from '../../shared/state/students-list/students-list.actions';
-import {StudentFormModalComponent} from './components/student-form-modal/student-form-modal.component';
+import {FetchStudents} from '../../shared/state/profiles-students-list/profiles-students-list.actions';
+import {ProfilesStudentsFormModalComponent} from './components/profiles-students-form-modal/profiles-students-form-modal.component';
 import {FORM_PAGE_MODE} from '../../shared/model/FormPageMode';
 
 @Component({
   selector: 'app-student-list',
-  templateUrl: './student-page.component.html',
-  styleUrls: ['./student-page.component.css']
+  templateUrl: './profiles-students-page.component.html',
+  styleUrls: ['./profiles-students-page.component.css']
 })
 
 
-export class StudentPageComponent implements AfterViewInit, OnInit{
+export class ProfilesStudentsPageComponent implements AfterViewInit, OnInit{
   placeName = `Student List`;
   displayedOnlyDataColumns: string[] = ['id', 'firstName', 'lastName', 'address', 'hours', 'status', 'category', 'createDate'];
   displayedColumns: string[] = [...this.displayedOnlyDataColumns, 'action'];
@@ -33,7 +33,7 @@ export class StudentPageComponent implements AfterViewInit, OnInit{
   searchAction$: Observable<string>;
   filterAction$: Observable<string>;
 
-  @Select(StudentsListState.getAllStudents)
+  @Select(ProfilesStudentsListState.getAllStudents)
   students$: Observable<IStudent[]>;
 
   constructor(private modalService: NgbModal,
@@ -80,19 +80,19 @@ export class StudentPageComponent implements AfterViewInit, OnInit{
   }
 
   openEditStudentModal(studentId: number, userId: number): void {
-    const modalRef = this.modalService.open(StudentFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesStudentsFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.EDIT;
     modalRef.componentInstance.studentId = studentId;
     modalRef.componentInstance.userId = userId;
   }
 
   openAddStudentModal(): void {
-    const modalRef = this.modalService.open(StudentFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesStudentsFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.CREATE;
   }
 
   openDeleteStudentModal(studentId: number, userId: number): void  {
-    const modalRef = this.modalService.open(StudentFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesStudentsFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DELETE;
     modalRef.componentInstance.studentId = studentId;
     modalRef.componentInstance.userId = userId;
@@ -108,7 +108,7 @@ export class StudentPageComponent implements AfterViewInit, OnInit{
   }
 
   openViewTeacherModal(studentId: number, userId: number): void {
-    const modalRef = this.modalService.open(StudentFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesStudentsFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DETAILS;
     modalRef.componentInstance.studentId = studentId;
     modalRef.componentInstance.userId = userId;

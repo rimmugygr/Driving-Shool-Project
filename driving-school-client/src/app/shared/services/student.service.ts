@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {IStudent} from '../model/Student';
+import {tap} from 'rxjs/operators';
 
 const STUDENT_API = '/server/api/manage/students';
 const httpHeaders = {
@@ -16,7 +17,9 @@ export class StudentService {
   constructor(private http: HttpClient) { }
 
   getAllStudentsResponse(): Observable<IStudent[]> {
-    return this.http.get<IStudent[]>(STUDENT_API);
+    return this.http.get<IStudent[]>(STUDENT_API).pipe(
+      tap(x => console.log(JSON.stringify(x[0])))
+    );
   }
 
   getStudent(studentId: number): Observable<IStudent> {

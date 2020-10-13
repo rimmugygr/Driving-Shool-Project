@@ -1,22 +1,22 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {ITeacher} from '../../../../shared/model/Teacher';
 import {FORM_PAGE_MODE} from '../../../../shared/model/FormPageMode';
 import {Store} from '@ngxs/store';
-import {CreateTeacher, DeleteTeacher, UpdateTeacher} from '../../../../shared/state/teacher-list/teacher-list.actions';
-import {TeacherListState} from '../../../../shared/state/teacher-list/teacher-list.state';
+import {Student} from '../../../../shared/model/Student';
+import {CreateStudent, DeleteStudent, UpdateStudent} from '../../../../shared/state/profiles-students-list/profiles-students-list.actions';
+import {ProfilesStudentsListState} from '../../../../shared/state/profiles-students-list/profiles-students-list-state.service';
 
 @Component({
   selector: 'app-teacher-form-modal',
-  templateUrl: './teacher-form-modal.component.html',
-  styleUrls: ['./teacher-form-modal.component.css']
+  templateUrl: './profiles-students-form-modal.component.html',
+  styleUrls: ['./profiles-students-form-modal.component.css']
 })
-export class TeacherFormModalComponent implements OnInit {
+export class ProfilesStudentsFormModalComponent implements OnInit {
   @Input() pageMode: FORM_PAGE_MODE;
-  @Input() teacherId;
+  @Input() studentId;
   @Input() userId;
-  teacher: ITeacher;
+  student: Student;
   hide = true;
   form: FormGroup;
   message = '';
@@ -30,14 +30,16 @@ export class TeacherFormModalComponent implements OnInit {
 
   submitForm(): void {
     if (this.isDeleteMode()) {
-      this.store.dispatch(new DeleteTeacher({teacher: this.form.getRawValue()}));
+      this.store.dispatch(new DeleteStudent({student: this.form.getRawValue()}));
     }
     if (this.form.valid) {
       if (this.isCreateMode()) {
-        this.store.dispatch(new CreateTeacher({teacher: this.form.value}));
+        this.store.dispatch(new CreateStudent({student: this.form.value}));
+        this.modal.close();
       }
       if (this.isEditMode()) {
-        this.store.dispatch(new UpdateTeacher({teacher: this.form.getRawValue()}));
+        this.store.dispatch(new UpdateStudent({student: this.form.getRawValue()}));
+        this.modal.close();
       }
     } else {
       this.message = 'Pleas fill all form !';
@@ -49,6 +51,11 @@ export class TeacherFormModalComponent implements OnInit {
       id: new FormControl({value: null, disabled: true}),
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
+      address: new FormControl(null, Validators.required),
+      phone: new FormControl(null, Validators.required),
+      status: new FormControl(null, Validators.required),
+      hours: new FormControl({value: null, disabled: true}),
+      email: new FormControl(null, [Validators.email, Validators.required]),
       user: new FormGroup ({
         id: new FormControl({value: null, disabled: true}),
         username: new FormControl(null, Validators.required),
@@ -60,13 +67,12 @@ export class TeacherFormModalComponent implements OnInit {
       updateDate: new FormControl( {value: null, disabled: true}),
     });
     if (this.isEditMode() || this.isDetailsMode() || this.isDeleteMode()) {
-      this.teacher = this.store.selectSnapshot(TeacherListState.getTeacherById)(this.teacherId);
-      this.form.patchValue({...this.teacher});
+      this.student = this.store.selectSnapshot(ProfilesStudentsListState.getStudentById)(this.studentId);
+      this.form.patchValue({...this.student});
     }
     if (this.isDetailsMode()) {
       this.form.disable();
     }
-
   }
 
   isEditMode(): boolean {

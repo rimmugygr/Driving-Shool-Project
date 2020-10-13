@@ -2,8 +2,8 @@ import {APP_INITIALIZER, Injectable, Injector} from '@angular/core';
 import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {Login, Logout} from '../state/user-auth/user-auth.actions';
 import {MessageService} from '../services/message.service';
-import {CreateStudent, DeleteStudent, UpdateStudent} from '../state/students-list/students-list.actions';
-import {CreateTeacher, DeleteTeacher, UpdateTeacher} from '../state/teacher-list/teacher-list.actions';
+import {CreateStudent, DeleteStudent, UpdateStudent} from '../state/profiles-students-list/profiles-students-list.actions';
+import {CreateTeacher, DeleteTeacher, UpdateTeacher} from '../state/profiles-teachers-list/profiles-teachers-list.actions';
 
 @Injectable({
   providedIn: 'root'

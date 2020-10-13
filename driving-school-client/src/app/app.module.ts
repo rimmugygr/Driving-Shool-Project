@@ -16,14 +16,14 @@ import {UserAuthState} from './shared/state/user-auth/user-auth.state';
 import {routeHandlerProviders} from './shared/handlers/route.handler';
 import {ToastrModule} from 'ngx-toastr';
 import {messageHandlerProviders} from './shared/handlers/message.handler';
-import {StudentsListState} from './shared/state/students-list/students-list.state';
-import {TeacherListState} from './shared/state/teacher-list/teacher-list.state';
+import {ProfilesStudentsListState} from './shared/state/profiles-students-list/profiles-students-list-state.service';
+import {ProfilesTeachersListState} from './shared/state/profiles-teachers-list/profiles-teachers-list-state.service';
 import {AvailableDateListState} from './shared/state/available-date-list/available-date-list.state';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 const persistentStates: StateClass<any>[] = [UserAuthState];
-const states: StateClass<any>[] = [...persistentStates, StudentsListState, TeacherListState, AvailableDateListState];
+const states: StateClass<any>[] = [...persistentStates, ProfilesStudentsListState, ProfilesTeachersListState, AvailableDateListState];
 
 @NgModule({
   declarations: [

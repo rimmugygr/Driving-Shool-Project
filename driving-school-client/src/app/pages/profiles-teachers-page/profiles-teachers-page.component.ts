@@ -3,21 +3,21 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {TeacherFormModalComponent} from './components/teacher-form-modal/teacher-form-modal.component';
+import {ProfilesTeachersFormModalComponent} from './components/profiles-teachers-form-modal/profiles-teachers-form-modal.component';
 import {FORM_PAGE_MODE} from '../../shared/model/FormPageMode';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
-import {TeacherListState} from '../../shared/state/teacher-list/teacher-list.state';
+import {ProfilesTeachersListState} from '../../shared/state/profiles-teachers-list/profiles-teachers-list-state.service';
 import {debounceTime, map} from 'rxjs/operators';
-import {FetchTeachers} from '../../shared/state/teacher-list/teacher-list.actions';
+import {FetchTeachers} from '../../shared/state/profiles-teachers-list/profiles-teachers-list.actions';
 import {ITeacher} from '../../shared/model/Teacher';
 
 @Component({
   selector: 'app-teacher-list',
-  templateUrl: './teacher-page.component.html',
-  styleUrls: ['./teacher-page.component.css']
+  templateUrl: './profiles-teachers-page.component.html',
+  styleUrls: ['./profiles-teachers-page.component.css']
 })
-export class TeacherPageComponent implements AfterViewInit, OnInit {
+export class ProfilesTeachersPageComponent implements AfterViewInit, OnInit {
   placeName = `Teacher List`;
   displayedOnlyDataColumns: string[] =  ['id', 'firstName', 'lastName', 'createDate', 'updateDate'];
   displayedColumns: string[] = [...this.displayedOnlyDataColumns, 'action'];
@@ -31,7 +31,7 @@ export class TeacherPageComponent implements AfterViewInit, OnInit {
   searchAction$: Observable<string>;
   filterAction$: Observable<string>;
 
-  @Select(TeacherListState.getAllTeachers)
+  @Select(ProfilesTeachersListState.getAllTeachers)
   teachers$: Observable<ITeacher[]>;
 
   constructor(private modalService: NgbModal,
@@ -82,28 +82,28 @@ export class TeacherPageComponent implements AfterViewInit, OnInit {
   }
 
   openEditTeacherModal(teacherId: number, userId: number): void {
-    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesTeachersFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.EDIT;
     modalRef.componentInstance.teacherId = teacherId;
     modalRef.componentInstance.userId = userId;
   }
 
   openViewTeacherModal(teacherId: number, userId: number): void {
-    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesTeachersFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DETAILS;
     modalRef.componentInstance.teacherId = teacherId;
     modalRef.componentInstance.userId = userId;
   }
 
   openDeleteTeacherModal(teacherId: number, userId: number): void {
-    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesTeachersFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.DELETE;
     modalRef.componentInstance.teacherId = teacherId;
     modalRef.componentInstance.userId = userId;
   }
 
   openAddTeacherModal(): void {
-    const modalRef = this.modalService.open(TeacherFormModalComponent);
+    const modalRef = this.modalService.open(ProfilesTeachersFormModalComponent);
     modalRef.componentInstance.pageMode = FORM_PAGE_MODE.CREATE;
   }
 

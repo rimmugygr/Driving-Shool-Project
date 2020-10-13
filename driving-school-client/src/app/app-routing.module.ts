@@ -10,12 +10,12 @@ const routes: Routes = [
   },
   {
     path: 'student',
-    loadChildren: () => import('./pages/student-page/student-page.module').then(m => m.StudentPageModule),
+    loadChildren: () => import('./pages/profiles-students-page/profiles-students-page.module').then(m => m.ProfilesStudentsPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'teacher',
-    loadChildren: () => import('./pages/teacher-page/teacher-page.module').then(m => m.TeacherPageModule),
+    loadChildren: () => import('./pages/profiles-teachers-page/profiles-teachers-page.module').then(m => m.ProfilesTeachersPageModule),
     canActivate: [AuthGuard]
   },
   {

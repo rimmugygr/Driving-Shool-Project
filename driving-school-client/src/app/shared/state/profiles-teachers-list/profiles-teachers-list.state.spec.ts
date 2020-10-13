@@ -1,11 +1,11 @@
 import { TestBed, async } from '@angular/core/testing';
 import { NgxsModule, Store } from '@ngxs/store';
-import { TeacherListState, TeacherListStateModel } from './teacher-list.state';
+import { ProfilesTeachersListState, ProfilesTeachersListStateModel } from './profiles-teachers-list-state.service';
 describe('TeacherList store', () => {
   let store: Store;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NgxsModule.forRoot([TeacherListState])]
+      imports: [NgxsModule.forRoot([ProfilesTeachersListState])]
     }).compileComponents();
     store = TestBed.get(Store);
   }));

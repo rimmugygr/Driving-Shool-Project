@@ -1,7 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {Select} from '@ngxs/store';
 import {UserAuthState} from '../state/user-auth/user-auth.state';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+
+interface NavigationItem {
+  icon: string;
+  name: string;
+  type: 'page' | 'action';
+  isVisible: Observable<boolean> | boolean;
+  url?: string;
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -9,68 +17,37 @@ import {Observable} from 'rxjs';
 
     <mat-toolbar></mat-toolbar>
     <mat-list>
-      <mat-list-item>
-        <a routerLink="/home" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>home</mat-icon>
-          <span>Home</span>
-        </a>
-      </mat-list-item>
-      <mat-list-item *ngIf="isShowAdminBoard$ | async">
-        <a routerLink="/student" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>school</mat-icon>
-          <span>Student</span>
-        </a>
-      </mat-list-item>
-      <mat-list-item *ngIf="isShowAdminBoard$ | async">
-        <a routerLink="/teacher" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>work</mat-icon>
-          <span>Teacher</span>
-        </a>
-      </mat-list-item>
-      <mat-list-item *ngIf="isShowAdminBoard$ | async">
-        <a routerLink="/available" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>work</mat-icon>
-          <span>Available Date</span></a>
-      </mat-list-item>
-      <mat-list-item *ngIf="isAuthenticated$ | async">
-        <a routerLink="/profile" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>person</mat-icon>
-          <span>Profile</span></a>
-      </mat-list-item>
-      <mat-list-item *ngIf="isShowTeacherBoard$ | async">
-        <a routerLink="tech" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>work</mat-icon>
-          <span>Only Teacher</span></a>
-      </mat-list-item>
-      <mat-list-item *ngIf="isShowStudentBoard$ | async">
-        <a routerLink="stud" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>work</mat-icon>
-          <span>Only Student</span></a>
-      </mat-list-item>
-      <mat-list-item>
-        <a routerLink="login" class="list-group-item list-group-item-action bg-light">
-          <mat-icon>work</mat-icon>
-          <span>Login</span></a>
-      </mat-list-item>
+      <div *ngFor="let item of navItems">
+        <mat-list-item *ngIf="item.isVisible | async">
+          <a routerLink="{{item.url}}" class="list-group-item list-group-item-action bg-light">
+            <div><mat-icon >{{item.icon}}</mat-icon>{{item.name}}</div>
+          </a>
+        </mat-list-item>
+      </div>
     </mat-list>
-
-  `
+ `
 })
+
+
 export class SidebarComponent implements OnInit{
-
-  @Select(UserAuthState.isAuthenticated)
-  isAuthenticated$: Observable<boolean>;
-
-  @Select(UserAuthState.isShowAdminBoard)
-  isShowAdminBoard$: Observable<boolean>;
-
-  @Select(UserAuthState.isShowStudentBoard)
-  isShowStudentBoard$: Observable<boolean>;
-
-  @Select(UserAuthState.isShowTeacherBoard)
-  isShowTeacherBoard$: Observable<boolean>;
+  navItems: NavigationItem[];
+  isAlwaysTrue: Observable<boolean> = of(true);
+  @Select(UserAuthState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select(UserAuthState.isShowAdminBoard) isShowAdminBoard$: Observable<boolean>;
+  @Select(UserAuthState.isShowStudentBoard) isShowStudentBoard$: Observable<boolean>;
+  @Select(UserAuthState.isShowTeacherBoard) isShowTeacherBoard$: Observable<boolean>;
 
   constructor() {
+    this.navItems = [
+      { icon: `home`, name: 'Home', type: 'page', url: '/home', isVisible: this.isAlwaysTrue},
+      { icon: `school`, name: 'Profiles Student', type: 'page', url: '/student', isVisible: this.isShowAdminBoard$},
+      { icon: `work`, name: 'Profiles Teacher', type: 'page', url: '/teacher', isVisible: this.isShowAdminBoard$},
+      { icon: `work`, name: 'Available Date', type: 'page', url: '/available', isVisible: this.isShowAdminBoard$},
+      { icon: `person`, name: 'Profile', type: 'page', url: '/profile', isVisible: this.isAuthenticated$},
+      { icon: `work`, name: 'Only Teacher', type: 'page', url: '/tech', isVisible: this.isShowTeacherBoard$},
+      { icon: `work`, name: 'Only Student', type: 'page', url: '/stud', isVisible: this.isShowStudentBoard$},
+      { icon: `work`, name: 'Login', type: 'page', url: '/login', isVisible: this.isAlwaysTrue},
+    ];
   }
 
   ngOnInit(): void {

@@ -1,30 +1,30 @@
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import {CreateTeacher, DeleteTeacher, FetchTeachers, UpdateTeacher} from './teacher-list.actions';
+import {CreateTeacher, DeleteTeacher, FetchTeachers, UpdateTeacher} from './profiles-teachers-list.actions';
 import {ITeacher} from '../../model/Teacher';
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
 import {TeacherService} from '../../services/teacher.service';
 
-export interface TeacherListStateModel {
+export interface ProfilesTeachersListStateModel {
   teachers: ITeacher[];
 }
 
-@State<TeacherListStateModel>({
-  name: 'teacherList',
+@State<ProfilesTeachersListStateModel>({
+  name: 'profilesTeachersList',
   defaults: {
     teachers: []
   }
 })
 @Injectable()
-export class TeacherListState {
+export class ProfilesTeachersListState {
 
   @Selector()
-  public static getAllTeachers(state: TeacherListStateModel): ITeacher[] {
+  public static getAllTeachers(state: ProfilesTeachersListStateModel): ITeacher[] {
     return state.teachers;
   }
 
   @Selector()
-  public static getTeacherById(state: TeacherListStateModel): (id: string) => ITeacher {
+  public static getTeacherById(state: ProfilesTeachersListStateModel): (id: string) => ITeacher {
     return (id: string): ITeacher => {
       return state.teachers.find(teacher => teacher.id === id);
     };
@@ -34,7 +34,7 @@ export class TeacherListState {
   }
 
   @Action(FetchTeachers)
-  public fetchTeachers(ctx: StateContext<TeacherListStateModel>): any {
+  public fetchTeachers(ctx: StateContext<ProfilesTeachersListStateModel>): any {
     return this.teacherService.getAllTeachersResponse().pipe(
       tap(data => {
         ctx.patchState({teachers: data});
@@ -43,7 +43,7 @@ export class TeacherListState {
   }
 
   @Action(CreateTeacher)
-  public createTeacher(ctx: StateContext<TeacherListStateModel>, action: CreateTeacher): any {
+  public createTeacher(ctx: StateContext<ProfilesTeachersListStateModel>, action: CreateTeacher): any {
     return this.teacherService.postTeacher(action.payload.teacher).pipe(
       tap(data => {
         const teachers = [... ctx.getState().teachers, data];
@@ -53,7 +53,7 @@ export class TeacherListState {
   }
 
   @Action(UpdateTeacher)
-  public updateTeacher(ctx: StateContext<TeacherListStateModel>, action: UpdateTeacher): any {
+  public updateTeacher(ctx: StateContext<ProfilesTeachersListStateModel>, action: UpdateTeacher): any {
     return this.teacherService.putTeacher(action.payload.teacher).pipe(
       tap(data => {
         const teachers = ctx.getState().teachers.map(x =>  x.id === data.id ? data : x);
@@ -63,7 +63,7 @@ export class TeacherListState {
   }
 
   @Action(DeleteTeacher)
-  public deleteTeacher(ctx: StateContext<TeacherListStateModel>, action: DeleteTeacher): any {
+  public deleteTeacher(ctx: StateContext<ProfilesTeachersListStateModel>, action: DeleteTeacher): any {
     return this.teacherService.deleteTeacher(action.payload.teacher).pipe(
       tap(data => {
         const teachers = ctx.getState().teachers.filter(x =>  x.id !== data.id);

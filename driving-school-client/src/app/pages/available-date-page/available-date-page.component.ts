@@ -45,8 +45,9 @@ export class AvailableDatePageComponent implements OnInit {
       map(availableDates => {
         return availableDates.map(availableDate => {
           const dateStrings = availableDate.date.split(RegExp(`[- :]`)).map(x => Number(x)); // get table of date y,m,d,h,m,s
-          const start = new Date( dateStrings[0], dateStrings[1],  dateStrings[2], dateStrings[3], dateStrings[4]); // start date
-          const end = new Date( dateStrings[0], dateStrings[1],  dateStrings[2], dateStrings[3] + 2, dateStrings[4]); // end date
+          // month 0-11 not 1-12 as java
+          const start = new Date( dateStrings[0], dateStrings[1] - 1,  dateStrings[2], dateStrings[3], dateStrings[4]); // start date
+          const end = new Date( dateStrings[0], dateStrings[1] - 1,  dateStrings[2], dateStrings[3] + 2, dateStrings[4]); // end date
           const title = availableDate.teacherFirstName + ' ' + availableDate.teacherLastName + ': '
             + dateStrings[3] + '-' +  (dateStrings[3] + 2); // create title
           const color = colors.find(c => c.id === availableDate.teacherId); // find color which is assign by id
@@ -69,6 +70,11 @@ export class AvailableDatePageComponent implements OnInit {
     this.getAvailableDate();
   }
 
+  changeDay({ date, events }: { date: Date; events: CalendarEvent<{ availableBate: IAvailableDate }>[]; }): void {
+    this.viewDate = date;
+    this.view = CalendarView.Day;
+  }
+
   dayClicked({ date, events }: { date: Date; events: CalendarEvent<{ availableBate: IAvailableDate }>[]; }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -76,6 +82,8 @@ export class AvailableDatePageComponent implements OnInit {
         events.length === 0
       ) {
         this.activeDayIsOpen = false;
+        this.viewDate = date;
+        this.view = CalendarView.Day;
       } else {
         this.activeDayIsOpen = true;
         this.viewDate = date;
