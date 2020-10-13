@@ -1,5 +1,7 @@
 package driving.school.model.user;
 
+import driving.school.model.Student;
+import driving.school.model.Teacher;
 import lombok.*;
 import javax.persistence.*;
 import java.util.HashSet;

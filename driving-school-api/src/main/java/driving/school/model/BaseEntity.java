@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
@@ -18,15 +18,11 @@ public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @UpdateTimestamp
-    private Date updateDate;
-
+    private LocalDateTime updateDate;
     @CreationTimestamp
-    private Date createDate;
-
+    private LocalDateTime createDate;
     private boolean deleted;
-
     public BaseEntity(Long id) {
         this.id = id;
     }

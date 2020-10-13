@@ -1,11 +1,11 @@
 package driving.school.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import driving.school.dto.StudentUserDto;
+import driving.school.dto.StudentDto;
 import driving.school.dto.UserDto;
 import driving.school.mapper.StudentMapper;
 import driving.school.model.StudentStatus;
-import driving.school.model.user.Student;
+import driving.school.model.Student;
 import driving.school.model.user.User;
 import driving.school.services.StudentService;
 import org.junit.jupiter.api.*;
@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
-@WebMvcTest(controllers = {StudentManageController.class})
-class StudentManageControllerTest {
+@WebMvcTest(controllers = {ProfilesStudentsController.class})
+class ProfilesStudentsControllerTest {
     @Autowired
     MockMvc mvc;
 
@@ -31,13 +31,13 @@ class StudentManageControllerTest {
     @MockBean
     StudentService studentServiceMock;
 
-    @MockBean
-    StudentMapper studentMapperMock;
+//    @MockBean
+//    StudentMapper studentMapperMock;
 
     long studentId;
     Student anyStudent;
-    StudentUserDto anyStudentDto;
-    Student anyStudentWithId;
+    StudentDto anyStudentDto;
+    StudentDto anyStudentWithId;
     String requestStudentJson;
     ResultActions result;
 
@@ -55,14 +55,14 @@ class StudentManageControllerTest {
                     .user(User.builder().username("00000").password("000000").build())
                     .build();
 
-            anyStudentWithId = Student.builder()
+            anyStudentWithId = StudentDto.builder()
                     .id(studentId)
                     .address("home")
                     .status(StudentStatus.Active)
-                    .user(User.builder().username("00000").password("000000").build())
+                    .user(UserDto.builder().username("00000").password("000000").build())
                     .build();
 
-            anyStudentDto = StudentUserDto.builder()
+            anyStudentDto = StudentDto.builder()
                     .address("home")
                     .status(StudentStatus.Active)
                     .user(UserDto.builder().username("00000").password("000000").build())
@@ -70,10 +70,8 @@ class StudentManageControllerTest {
 
             requestStudentJson = mapper.writeValueAsString(anyStudentDto);
 
-            Mockito.when(studentMapperMock.map(anyStudentDto))
-                    .thenReturn(anyStudent);
 
-            Mockito.when(studentServiceMock.addStudent(anyStudent))
+            Mockito.when(studentServiceMock.addStudent(anyStudentDto))
                     .thenReturn(anyStudentWithId);
             //when
             result = mvc.perform(
@@ -85,7 +83,7 @@ class StudentManageControllerTest {
         @Test
         void shouldAddStudent() throws Exception {
             //then
-            Mockito.verify(studentServiceMock).addStudent(anyStudent);
+            Mockito.verify(studentServiceMock).addStudent(anyStudentDto);
         }
         @Test
         void shouldReturnInHeaderLocationResources() throws Exception {
@@ -99,7 +97,7 @@ class StudentManageControllerTest {
         }
         @AfterEach
         void reset() {
-            Mockito.reset(studentServiceMock,studentMapperMock);
+            Mockito.reset(studentServiceMock);
         }
     }
 
@@ -111,18 +109,8 @@ class StudentManageControllerTest {
             //given
             studentId = 1L;
 
-            anyStudent = Student.builder()
-                    .address("home")
-                    .firstName("first")
-                    .lastName("last")
-                    .email("a@a.pl")
-                    .hours(0)
-                    .phone("12345")
-                    .status(StudentStatus.Active)
-                    .user(User.builder().username("00000").password("000000").build())
-                    .build();
-
-            anyStudentDto = StudentUserDto.builder()
+            anyStudentDto = StudentDto.builder()
+                    .id(2L)
                     .address("home")
                     .firstName("first")
                     .lastName("last")
@@ -135,9 +123,6 @@ class StudentManageControllerTest {
 
             requestStudentJson = mapper.writeValueAsString(anyStudent);
 
-            Mockito.when(studentMapperMock.map(anyStudentDto))
-                    .thenReturn(anyStudent);
-
             //when
             result = mvc.perform(
                     MockMvcRequestBuilders.put("/api/manage/students/" + studentId)
@@ -148,7 +133,7 @@ class StudentManageControllerTest {
         @Test
         void shouldPutStudentById() throws Exception {
             //then
-            Mockito.verify(studentServiceMock).putStudentById(studentId, anyStudent);
+            Mockito.verify(studentServiceMock).putStudentById(studentId, anyStudentDto);
         }
         @Test
         void shouldReturnIsOk() throws Exception {
@@ -157,7 +142,7 @@ class StudentManageControllerTest {
         }
         @AfterEach
         void reset() {
-            Mockito.reset(studentServiceMock,studentMapperMock);
+            Mockito.reset(studentServiceMock);
         }
     }
     @Test

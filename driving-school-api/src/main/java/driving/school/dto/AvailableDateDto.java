@@ -3,7 +3,7 @@ package driving.school.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Getter
@@ -19,7 +19,7 @@ public class AvailableDateDto {
     private boolean reserved;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date date;
+    private LocalDateTime date;
 
 //    @Enumerated(EnumType.STRING)
 //    private Category category;

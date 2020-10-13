@@ -1,6 +1,7 @@
-package driving.school.model.user;
+package driving.school.model;
 
 import driving.school.model.*;
+import driving.school.model.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ResultCheckStyle;

@@ -1,8 +1,8 @@
 package driving.school.controller;
 
-import driving.school.dto.TeacherUserDto;
+import driving.school.dto.TeacherDto;
 import driving.school.mapper.TeacherMapper;
-import driving.school.model.user.Teacher;
+import driving.school.model.Teacher;
 import driving.school.services.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/manage/teachers")
-public class TeacherManageController {
+public class ProfilesTeachersController {
     private final TeacherService teacherService;
     private final TeacherMapper teacherMapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TeacherUserDto> getTeacher() {
+    public List<TeacherDto> getTeacher() {
         return teacherService.getAllTeacher().stream()
                 .map(teacherMapper::map)
                 .collect(Collectors.toList());
@@ -27,29 +27,29 @@ public class TeacherManageController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TeacherUserDto getTeacher(@PathVariable long id) {
+    public TeacherDto getTeacher(@PathVariable long id) {
         return teacherMapper.map(teacherService.getTeacherById(id));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TeacherUserDto patchTeacher(@PathVariable long id,
-                                       @RequestBody TeacherUserDto teacherUserDto){
-        Teacher teacherPuttied = teacherService.putTeacherById(id, teacherMapper.map(teacherUserDto));
+    public TeacherDto patchTeacher(@PathVariable long id,
+                                   @RequestBody TeacherDto teacherDto){
+        Teacher teacherPuttied = teacherService.putTeacherById(id, teacherMapper.map(teacherDto));
         return teacherMapper.map(teacherPuttied);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TeacherUserDto postTeacher(@RequestBody TeacherUserDto teacherUserDto) {
-        System.out.println(teacherUserDto);
-        Teacher teacherPosted =  teacherService.addTeacher(teacherMapper.map(teacherUserDto));
+    public TeacherDto postTeacher(@RequestBody TeacherDto teacherDto) {
+        System.out.println(teacherDto);
+        Teacher teacherPosted =  teacherService.addTeacher(teacherMapper.map(teacherDto));
         return teacherMapper.map(teacherPosted);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TeacherUserDto deleteTeacher(@PathVariable long id) {
+    public TeacherDto deleteTeacher(@PathVariable long id) {
         return teacherService.deleteTeacherById(id);
     }
 }

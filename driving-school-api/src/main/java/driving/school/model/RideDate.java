@@ -1,12 +1,11 @@
 package driving.school.model;
 
-import driving.school.model.user.Student;
-import driving.school.model.user.Teacher;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
@@ -19,8 +18,7 @@ import java.util.Date;
 public class RideDate extends BaseEntity {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Temporal( TemporalType.TIMESTAMP)
-    private Date date;
+    private LocalDateTime date;
 
     @ManyToOne(targetEntity = Student.class)
     @JoinColumn(name="student_id")
@@ -36,7 +34,7 @@ public class RideDate extends BaseEntity {
     @Column(name = "reserved", columnDefinition = "BOOLEAN")
     private boolean reserved;
 
-    public RideDate(Date date, Student student, Teacher teacher) {
+    public RideDate(LocalDateTime date, Student student, Teacher teacher) {
         this.date = date;
         this.student = student;
         this.teacher = teacher;

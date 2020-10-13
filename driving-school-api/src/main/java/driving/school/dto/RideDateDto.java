@@ -2,13 +2,10 @@ package driving.school.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import driving.school.model.RideStatus;
-import driving.school.model.user.Student;
-import driving.school.model.user.Teacher;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -26,7 +23,7 @@ public class RideDateDto{
     private String studentLastName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date date;
+    private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
     private RideStatus rideStatus;

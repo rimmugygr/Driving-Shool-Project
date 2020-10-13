@@ -6,6 +6,7 @@ import driving.school.model.Category;
 import driving.school.model.RideDate;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -17,16 +18,16 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class TeacherUserDto {
+public class TeacherDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private List<AvailableDate> availableDates;
-    private List<RideDate> rideDateList;
+    private List<AvailableDateDto> availableDates;
+    private List<RideDateDto> rideDateList;
     private Set<Category> categoryList;
     private UserDto user;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateDate;
+    private LocalDateTime updateDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
+    private LocalDateTime createDate;
 }

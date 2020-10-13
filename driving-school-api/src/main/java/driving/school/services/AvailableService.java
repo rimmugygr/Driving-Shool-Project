@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,6 @@ public class AvailableService {
 
     @Transactional
     public void deleteOldAvailableDate() {
-        availableDateRepo.deleteAllByDateIsBefore(Date.valueOf(LocalDate.now()));
+        availableDateRepo.deleteAllByDateIsBefore(LocalDateTime.now());
     }
 }
