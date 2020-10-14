@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {Select} from '@ngxs/store';
+import {UserAuthState} from '../../shared/state/user-auth/user-auth.state';
+import {Observable} from 'rxjs';
+import {IProfile} from '../../shared/model/Profile';
 
 @Component({
   selector: 'app-profile-page',
@@ -7,6 +11,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfilePageComponent implements OnInit {
   placeName = `Profile`;
+  @Select(UserAuthState.isGetProfile)
+  profile$: Observable<IProfile>;
 
   constructor() { }
 

@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit{
       { icon: `home`, name: 'Home', type: 'page', url: '/home', isVisible: this.isAlwaysTrue},
       { icon: `school`, name: 'Profiles Student', type: 'page', url: '/student', isVisible: this.isShowAdminBoard$},
       { icon: `work`, name: 'Profiles Teacher', type: 'page', url: '/teacher', isVisible: this.isShowAdminBoard$},
-      { icon: `work`, name: 'Available Date', type: 'page', url: '/available', isVisible: this.isShowAdminBoard$},
+      { icon: `date_range`, name: 'Available Date', type: 'page', url: '/available', isVisible: this.isShowAdminBoard$},
       { icon: `person`, name: 'Profile', type: 'page', url: '/profile', isVisible: this.isAuthenticated$},
       { icon: `work`, name: 'Only Teacher', type: 'page', url: '/tech', isVisible: this.isShowTeacherBoard$},
       { icon: `work`, name: 'Only Student', type: 'page', url: '/stud', isVisible: this.isShowStudentBoard$},

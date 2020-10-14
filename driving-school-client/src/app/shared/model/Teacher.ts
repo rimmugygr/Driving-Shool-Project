@@ -1,21 +1,21 @@
 import {IUser, User} from './User';
 
 export class  Teacher implements ITeacher{
+  id: string;
   firstName: string;
   lastName: string;
-  categoryList: string[];
   createDate: string;
   updateDate: string;
   user: User;
-  id: string;
+  categoryList?: string[];
 }
 
 export interface  ITeacher{
+  id: string;
   firstName: string;
   lastName: string;
-  categoryList: string[];
   createDate: string;
   updateDate: string;
   user: IUser;
-  id: string;
+  categoryList?: string[];
 }

@@ -4,7 +4,6 @@ export class Student implements IStudent{
   id: string;
   firstName: string;
   lastName: string;
-  categoryList: string[];
   status: string;
   hours: number;
   address: string;
@@ -13,12 +12,12 @@ export class Student implements IStudent{
   createDate: string;
   updateDate: string;
   user: User;
+  categoryList?: string[];
 }
 export interface IStudent {
   id: string;
   firstName: string;
   lastName: string;
-  categoryList: string[];
   status: string;
   hours: number;
   address: string;
@@ -27,4 +26,5 @@ export interface IStudent {
   createDate: string;
   updateDate: string;
   user: IUser;
+  categoryList?: string[];
 }

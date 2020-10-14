@@ -3,11 +3,13 @@ import {AuthService} from '../../services/auth.service';
 import {Login, Logout} from './user-auth.actions';
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
+import {IProfile} from '../../model/Profile';
 
 export interface UserAuthStateModel {
   token: string | null;
   username: string | null;
-  roles: string[] ;
+  roles: string[];
+  profile: IProfile;
 }
 
 @State<UserAuthStateModel>({
@@ -16,6 +18,7 @@ export interface UserAuthStateModel {
     token: null,
     username: null,
     roles: [],
+    profile: null
   }
 })
 
@@ -57,6 +60,11 @@ export class UserAuthState {
     return state.roles?.includes('STUDENT');
   }
 
+  @Selector()
+  static isGetProfile(state: UserAuthStateModel): IProfile {
+    return state.profile;
+  }
+
   constructor(private authService: AuthService) {}
 
   @Action(Login)
@@ -66,7 +74,8 @@ export class UserAuthState {
         result  =>  ctx.setState({
           token: result.token,
           username: result.username,
-          roles: result.roles
+          roles: result.roles,
+          profile: result.profile
         })
       ),
     );
@@ -77,7 +86,8 @@ export class UserAuthState {
     ctx.setState({
       token: null,
       username: null,
-      roles: []
+      roles: [],
+      profile: null
     });
   }
 }

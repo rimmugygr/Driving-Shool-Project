@@ -70,7 +70,7 @@ export class AvailableDatePageComponent implements OnInit {
     this.getAvailableDate();
   }
 
-  changeDay({ date, events }: { date: Date; events: CalendarEvent<{ availableBate: IAvailableDate }>[]; }): void {
+  changeDay( date ): void {
     this.viewDate = date;
     this.view = CalendarView.Day;
   }
@@ -83,7 +83,7 @@ export class AvailableDatePageComponent implements OnInit {
       ) {
         this.activeDayIsOpen = false;
         this.viewDate = date;
-        this.view = CalendarView.Day;
+        this.view = CalendarView.Week;
       } else {
         this.activeDayIsOpen = true;
         this.viewDate = date;
