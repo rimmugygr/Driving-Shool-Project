@@ -1,10 +1,9 @@
 package driving.school.controller;
 
-
 import driving.school.controller.request.ProfileRequest;
 import driving.school.controller.response.ProfileResponse;
 import driving.school.security.CurrentUsername;
-import driving.school.controller.response.JwtResponse;
+import driving.school.controller.response.LoginResponse;
 import driving.school.controller.request.LoginRequest;
 import driving.school.services.ProfileServices;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +20,17 @@ public class ProfileController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        JwtResponse jwtResponse = profileServices.loginToGetJwt(loginRequest);
-        return ResponseEntity.ok(jwtResponse);
+        LoginResponse loginResponse = profileServices.loginToGetJwtAndProfile(loginRequest);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getProfile(@CurrentUsername String username) {
-        ProfileResponse profile = profileServices.getProfile(username);
-        return ResponseEntity.ok(profile);
+    public ProfileResponse<?> getProfile(@CurrentUsername String username) {
+        return profileServices.getProfile(username);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<Void> putProfile(@CurrentUsername String username, ProfileRequest profileRequest) {
-        profileServices.updateProfile(username, profileRequest);
-        return ResponseEntity.ok().build();
+    public ProfileResponse<?> putProfile(@CurrentUsername String username,@RequestBody ProfileRequest<?> profileRequest) {
+        return profileServices.updateProfile(username, profileRequest);
     }
-
 }

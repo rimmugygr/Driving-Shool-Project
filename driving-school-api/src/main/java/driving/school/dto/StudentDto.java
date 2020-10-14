@@ -2,7 +2,6 @@ package driving.school.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import driving.school.model.Category;
-import driving.school.model.RideDate;
 import driving.school.model.StudentStatus;
 import lombok.*;
 

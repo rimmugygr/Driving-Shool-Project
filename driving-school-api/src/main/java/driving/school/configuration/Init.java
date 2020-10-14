@@ -47,6 +47,7 @@ public class Init {
                             .username("student")
                             .password(encoder.encode("student"))
                             .roles(Set.of(Authority.builder().name(Role.STUDENT).build()))
+                            .type(Role.STUDENT)
                             .build())
                     .build());
             //teacher profile example
@@ -57,6 +58,7 @@ public class Init {
                             .username("teacher")
                             .password(encoder.encode("teacher"))
                             .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
+                            .type(Role.TEACHER)
                             .build())
                     .build();
             teacherRepo.save(teacher);
@@ -70,6 +72,7 @@ public class Init {
                     .username("admin")
                     .password(encoder.encode("admin"))
                     .roles(Set.of(Authority.builder().name(Role.ADMIN).build()))
+                    .type(Role.ADMIN)
                     .build());
             //teacher with available date example
             Teacher teacher1 = Teacher.builder()
@@ -79,6 +82,7 @@ public class Init {
                             .username("teacher1")
                             .password(encoder.encode("teacher1"))
                             .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
+                            .type(Role.TEACHER)
                             .build())
                     .build();
             teacherRepo.save(teacher1);
@@ -97,6 +101,7 @@ public class Init {
                             .username("teacher2")
                             .password(encoder.encode("teacher2"))
                             .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
+                            .type(Role.TEACHER)
                             .build())
                     .build();
             teacherRepo.save(teacher2);

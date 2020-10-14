@@ -1,6 +1,5 @@
 package driving.school.model;
 
-import driving.school.model.*;
 import driving.school.model.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

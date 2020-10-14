@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -22,43 +23,54 @@ public class TeacherService {
     private final PasswordEncoder encoder;
     private final TeacherMapper teacherMapper;
 
-    public List<Teacher> getAllTeacher() {
-        return teacherRepo.findAll();
+    public List<TeacherDto> getAllTeacher() {
+        return teacherRepo.findAll().stream()
+                .map(teacherMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public Teacher getTeacherById(Long id) {
+    public TeacherDto getTeacherById(Long id) {
         return teacherRepo.findById(id)
+                .map(teacherMapper::map)
                 .orElseThrow(() ->new ResourcesNotFound("Teacher on id '"+ id +"' not exist"));
     }
 
-    public Teacher addTeacher(Teacher teacher){
-        if(!userService.isUniqueUsername(teacher.getUser().getUsername()))
-            throw new DuplicateUniqueKey("Username '" + teacher.getUser().getUsername() + "' already exist");
-        User user = teacher.getUser();
-        user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
-        user.setPassword(encoder.encode(teacher.getUser().getPassword()));
-        teacher.setUser(user);
-        return teacherRepo.save(teacher);
+    public TeacherDto addTeacher(TeacherDto teacherDto){
+        if(!userService.isUniqueUsername(teacherDto.getUser().getUsername()))
+            throw new DuplicateUniqueKey("Username '" + teacherDto.getUser().getUsername() + "' already exist");
+        Teacher teacher = teacherMapper.map(teacherDto);
+        teacher.setUser(User.builder()
+                .username(teacherDto.getUser().getUsername())
+                .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
+                .password(encoder.encode(teacherDto.getUser().getPassword()))
+                .build());
+        return teacherMapper.map(teacherRepo.save(teacher));
     }
 
-    public Teacher putTeacherById(Long teacherId, Teacher newTeacher) {
-        Teacher oldTeacher = getTeacherById(teacherId);
-        if (!oldTeacher.getUser().getUsername().equals(newTeacher.getUser().getUsername())) {
-            if(!userService.isUniqueUsername(newTeacher.getUser().getUsername()))
-                throw new DuplicateUniqueKey("Username '" + newTeacher.getUser().getUsername() + "' already exist");
+    public TeacherDto putTeacherById(Long teacherId, TeacherDto newTeacherDto) {
+        TeacherDto oldTeacherDto = getTeacherById(teacherId);
+        if (!oldTeacherDto.getUser().getUsername().equals(newTeacherDto.getUser().getUsername())) {
+            if(!userService.isUniqueUsername(newTeacherDto.getUser().getUsername()))
+                throw new DuplicateUniqueKey("Username '" + newTeacherDto.getUser().getUsername() + "' already exist");
         }
-        User user = newTeacher.getUser();
-        // if no password ten not change
-        if(newTeacher.getUser().getPassword().isEmpty()) {
-            user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
-            user.setPassword(oldTeacher.getUser().getPassword());
-        } else {
-            user.setRoles(Set.of(Authority.builder().name(Role.TEACHER).build()));
-            user.setPassword(encoder.encode(newTeacher.getUser().getPassword()));
+        User user ;
+        if(newTeacherDto.getUser().getPassword().isEmpty()) {            // if no password then not change
+            user = User.builder()
+                    .username(newTeacherDto.getUser().getUsername())
+                    .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
+                    .password(oldTeacherDto.getUser().getPassword())
+                    .build();
+        } else { // if password not null then encode this
+            user = User.builder()
+                    .username(newTeacherDto.getUser().getUsername())
+                    .roles(Set.of(Authority.builder().name(Role.TEACHER).build()))
+                    .password(encoder.encode(newTeacherDto.getUser().getPassword()))
+                    .build();
         }
-        newTeacher.setId(teacherId);
-        newTeacher.setUser(user);
-        return teacherRepo.save(newTeacher);
+        Teacher teacher = teacherMapper.map(newTeacherDto);
+        teacher.setId(teacherId);
+        teacher.setUser(user);
+        return teacherMapper.map(teacherRepo.save(teacher));
     }
 
     public TeacherDto deleteTeacherById(Long id) {

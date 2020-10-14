@@ -1,27 +1,22 @@
 package driving.school.controller.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtResponse {
+public class LoginResponse {
 	private String token;
 	private String type = "Bearer";
-	private Long id;
+	private Long userId;
 	private String username;
 	private List<String> roles;
-
-	public JwtResponse(String accessToken, Long id, String username, List<String> roles) {
-		this.token = accessToken;
-		this.id = id;
-		this.username = username;
-		this.roles = roles;
-	}
-
-
+	private ProfileResponse<?> profile;
 }

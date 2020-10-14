@@ -16,24 +16,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "username", unique = true, nullable = false)
     private String username;
-
     private String password;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(	name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_name"))
     private Set<Authority> roles = new HashSet<>();
-
-    @OneToOne
+    private Role type;
+    @OneToOne(fetch = FetchType.EAGER)
     private Student student;
-
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Teacher teacher;
-
     public User(User user) {
         this.id = user.id;
         this.username = user.username;

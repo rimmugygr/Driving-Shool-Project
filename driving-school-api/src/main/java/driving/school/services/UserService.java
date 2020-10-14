@@ -2,13 +2,9 @@ package driving.school.services;
 
 
 import driving.school.model.user.*;
-import driving.school.repository.AuthorityRepo;
 import driving.school.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @AllArgsConstructor
 @Service

@@ -15,36 +15,30 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/manage/teachers")
 public class ProfilesTeachersController {
     private final TeacherService teacherService;
-    private final TeacherMapper teacherMapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<TeacherDto> getTeacher() {
-        return teacherService.getAllTeacher().stream()
-                .map(teacherMapper::map)
-                .collect(Collectors.toList());
+        return teacherService.getAllTeacher();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TeacherDto getTeacher(@PathVariable long id) {
-        return teacherMapper.map(teacherService.getTeacherById(id));
+        return teacherService.getTeacherById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TeacherDto patchTeacher(@PathVariable long id,
                                    @RequestBody TeacherDto teacherDto){
-        Teacher teacherPuttied = teacherService.putTeacherById(id, teacherMapper.map(teacherDto));
-        return teacherMapper.map(teacherPuttied);
+        return teacherService.putTeacherById(id, teacherDto);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TeacherDto postTeacher(@RequestBody TeacherDto teacherDto) {
-        System.out.println(teacherDto);
-        Teacher teacherPosted =  teacherService.addTeacher(teacherMapper.map(teacherDto));
-        return teacherMapper.map(teacherPosted);
+        return teacherService.addTeacher(teacherDto);
     }
 
     @DeleteMapping("/{id}")

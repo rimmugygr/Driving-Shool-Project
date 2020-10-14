@@ -1,6 +1,5 @@
 package driving.school.controller.response;
 
-
 import lombok.*;
 
 @Builder
@@ -9,8 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ProfileResponse {
-    private Long id;
-    private String username;
-    private String type;
+public class ProfileResponse<Profile> {
+    private Profile profile;
 }

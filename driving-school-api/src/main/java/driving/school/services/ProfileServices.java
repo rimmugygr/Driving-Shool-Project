@@ -2,9 +2,10 @@ package driving.school.services;
 
 import driving.school.controller.request.LoginRequest;
 import driving.school.controller.request.ProfileRequest;
-import driving.school.controller.response.JwtResponse;
+import driving.school.controller.response.LoginResponse;
 import driving.school.controller.response.ProfileResponse;
-import driving.school.exceptions.DuplicateUniqueKey;
+import driving.school.dto.StudentDto;
+import driving.school.dto.TeacherDto;
 import driving.school.model.user.Role;
 import driving.school.model.user.User;
 import driving.school.security.components.JwtUtils;
@@ -15,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,27 +24,26 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class ProfileServices {
+    private final StudentService studentService;
+    private final TeacherService teacherService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final PasswordEncoder encoder;
 
-    public ProfileResponse getProfile(String username) {
+    public ProfileResponse<?> getProfile(String username) {
         User user = userService.getUser(username);
-        String profileType = Role.ADMIN.name();
-        if (user.getTeacher() != null) {
-            profileType = Role.TEACHER.name();
-        } else if (user.getStudent() != null) {
-            profileType = Role.STUDENT.name();
+        Object profile = null;
+        if (user.getType().equals(Role.TEACHER)) {
+            profile = teacherService.getTeacherById(user.getId());
+        } else if (user.getType().equals(Role.STUDENT)) {
+            profile = studentService.getStudentByUserId(user.getId());
         }
         return ProfileResponse.builder()
-                .id(user.getId())
-                .username(username)
-                .type(profileType)
+                .profile(profile)
                 .build();
     }
 
-    public JwtResponse loginToGetJwt(LoginRequest loginRequest) {
+    public LoginResponse loginToGetJwtAndProfile(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -56,21 +55,32 @@ public class ProfileServices {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        ProfileResponse<?> profile = getProfile(userDetails.getUsername());
         User user = userService.getUser(userDetails.getUsername());
-        return new JwtResponse(jwt,
-                user.getId(),
-                userDetails.getUsername(),
-                authorities);
+
+        return LoginResponse.builder()
+                .userId(user.getId())
+                .token(jwt)
+                .username(userDetails.getUsername())
+                .roles(authorities)
+                .profile(profile)
+                .build();
     }
 
-    public void updateProfile(String username, ProfileRequest profileRequest) {
-        User user = userService.getUser(username);
-        user.setPassword(encoder.encode(profileRequest.getPassword()));
-        if(!user.getUsername().equals(username) && !userService.isUniqueUsername(user.getUsername())){
-            throw new DuplicateUniqueKey("Username '" + user.getUsername() + "' already exist");
-        } else {
-            user.setUsername(profileRequest.getUsername());
+    public ProfileResponse<?> updateProfile(String username, ProfileRequest<?> profileRequest) {
+        Object profile = null;
+         if (profileRequest.getProfile() instanceof TeacherDto) {
+            TeacherDto teacherDto = (TeacherDto)profileRequest.getProfile();
+            Long id = userService.getUser(username).getTeacher().getId();
+            profile = teacherService.putTeacherById(id,teacherDto);
+        } else if (profileRequest.getProfile() instanceof StudentDto) {
+            StudentDto studentDto = (StudentDto)profileRequest.getProfile();
+            Long id = userService.getUser(username).getStudent().getId();
+            profile = studentService.putStudentById(id,studentDto);
         }
-        userService.saveUser(user);
+
+        return ProfileResponse.builder()
+                .profile(profile)
+                .build();
     }
 }
