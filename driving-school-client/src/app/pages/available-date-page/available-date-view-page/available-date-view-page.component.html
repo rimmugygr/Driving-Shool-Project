@@ -1,0 +1,38 @@
+<app-calendar-header [(view)]="view" [(viewDate)]="viewDate" mode='view'
+                     (viewDateChange)="refreshList()" (viewChange)="refreshList()">
+</app-calendar-header>
+
+<ng-template #loading>
+  <div class="text-center">
+    <i class="fas fa-spin fa-spinner fa-5x"></i> Loading events...
+  </div>
+</ng-template>
+
+<div *ngIf="events$ | async; else loading; let events">
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
+                             [activeDayIsOpen]="activeDayIsOpen" [excludeDays]="[0]"
+                             (dayClicked)="dayClicked($event.day)"
+                             (eventClicked)="eventClicked($event.event)">
+    </mwl-calendar-month-view>
+
+    <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events"
+                            [dayStartHour]="6" [dayEndHour]="20" [excludeDays]="[0]" [hourSegments]="1"
+                            (eventClicked)="eventClicked($event.event)"
+                            (dayHeaderClicked)="changeDay($event.day.date)">
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
+                           [dayStartHour]="6" [dayEndHour]="20" [hourSegments]="1"
+                           (eventClicked)="eventClicked($event.event)">
+
+    </mwl-calendar-day-view>
+  </div>
+</div>
+
+<ng-template appAttachTo="header">
+  <app-top-profile [placeName]="placeName"></app-top-profile>
+</ng-template>
+
+<ng-template appAttachTo="footer">
+</ng-template>

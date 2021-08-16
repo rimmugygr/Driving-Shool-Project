@@ -1,14 +1,13 @@
 import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {IAvailableDate} from '../../shared/model/AvailableDate';
+import {IAvailableDate} from '../../../shared/model/AvailableDate';
 import {Select, Store} from '@ngxs/store';
-import {FetchAvailableDates} from '../../shared/state/available-date-list/available-date-list.actions';
+import {FetchAvailableDates} from '../../../shared/state/available-date-list/available-date-list.actions';
 import {CalendarEventAction, CalendarEventTimesChangedEvent, CalendarEvent, CalendarView} from 'angular-calendar';
 import {Observable, Subject} from 'rxjs';
 import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours, startOfMonth, startOfWeek, endOfWeek} from 'date-fns';
-import {AvailableDateListState} from '../../shared/state/available-date-list/available-date-list.state';
+import {AvailableDateListState} from '../../../shared/state/available-date-list/available-date-list.state';
 import {map, tap} from 'rxjs/operators';
-import { IColor} from '../../shared/model/Colors';
-
+import { IColor} from '../../../shared/model/Colors';
 
 const colors: IColor[] = [
   { primary: '#ad2121', secondary: '#eca0a0' },
@@ -17,13 +16,12 @@ const colors: IColor[] = [
   { primary: '#902394', secondary: '#cea9cf' }
 ];
 
-
 @Component({
   selector: 'app-available-date',
-  templateUrl: './available-date-page.component.html',
-  styleUrls: ['./available-date-page.component.css']
+  templateUrl: './available-date-edit-page.component.html',
+  styleUrls: ['./available-date-edit-page.component.css']
 })
-export class AvailableDatePageComponent implements OnInit {
+export class AvailableDateEditPageComponent implements OnInit {
   placeName = `Available Date List`;
 
   view: CalendarView = CalendarView.Month;
@@ -35,7 +33,6 @@ export class AvailableDatePageComponent implements OnInit {
   students$: Observable<IAvailableDate[]>;
 
   constructor(private store: Store) {
-
 
     this.events$ = this.students$.pipe(
       tap(availableDates => { // color assign
