@@ -28,7 +28,7 @@ Used technology:
 - Mapstruct 1.3.1
 - Lombok 1.18.12
 - Maven 4.0
-Security:
+- Security:
 - JSON Web Tokens
 - Jsonwebtoken 0.9.1
 - Spring Boot Security
