@@ -9,7 +9,7 @@ Description functionality:
 - manage booking lessons (only students and admin)
 
 #Client:
-http://localhost:4200/
+ - http://localhost:4200/
 
 Used technology:
 - Angular 10
@@ -34,6 +34,6 @@ Security:
 - Spring Boot Security
 
 Example login in dev version:
-Admin: admin admin
-Student: student student
-Teacher: teacher teacher
+- Admin: admin admin
+- Student: student student
+- Teacher: teacher teacher
